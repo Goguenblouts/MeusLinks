@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Título exibido na aba do navegador -->
+    <title>⚡ Marcelio Venancio - O Portal do Futuro! ⚡</title>
+    <!-- Descrição para SEO e compartilhamento -->
+    <meta name="description" content="Acesse todas as minhas redes sociais, projetos e conteúdos de forma impactante e única, otimizada para o seu celular. Conecte-se com o futuro!">
+    
+    <!-- Tailwind CSS CDN: Framework para estilização rápida -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome CDN for Icons: Biblioteca de ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Google Font: Inter: Fonte principal para o design -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Variáveis de Cores (Definem a paleta para fácil alteração) */
+        :root {
+            --primary-purple: #d510f3; /* Fuchsia */
+            --primary-blue: #3b82f6;   /* Blue-500 */
+            --dark-bg: #0d1117;        /* Fundo principal do Body */
+            --card-bg: #1a202c;        /* Fundo dos cards/container */
+            --text-light: #e2e8f0;     /* Texto claro */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Fundo gradiente animado para o body */
+            background: linear-gradient(-45deg, #10161d, #1a212e, #202736, #1a212e); 
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite; 
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem 0.5rem; 
+            overflow-x: hidden; 
+            position: relative;
+        }
+
+        /* Animação do gradiente de fundo */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* CONTAINER PRINCIPAL COM BORDA DE ENERGIA PULSANTE */
+        .linktree-container {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem; 
+            border-radius: 1.5rem;
+            background-color: var(--card-bg); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+        }
+
+        /* EFEITO DE BORDA ANIMADA (Camada 1 - Blur para o brilho) */
+        .linktree-container::before {
+            content: '';
+            position: absolute;
+            top: -3px; right: -3px; bottom: -3px; left: -3px; 
+            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue), #6366f1, #d946ef);
+            background-size: 300% 300%;
+            filter: blur(3px); 
+            border-radius: 1.7rem; 
+            z-index: -1;
+            animation: pulseBorder 5s ease infinite alternate, gradientBorder 10s ease infinite;
+        }
+
+        /* EFEITO DE BORDA ANIMADA (Camada 2 - Borda nítida) */
+        .linktree-container::after {
+            content: '';
+            position: absolute;
+            top: -2px; right: -2px; bottom: -2px; left: -2px;
+            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
+            background-size: 200% 200%;
+            border-radius: 1.6rem;
+            z-index: -1;
+            animation: gradientBorder 4s ease infinite reverse;
+            opacity: 0.9;
+        }
+
+        /* Animação para movimentar o gradiente da borda */
+        @keyframes gradientBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animação de pulsação da opacidade da borda */
+        @keyframes pulseBorder {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+
+        /* Animações de entrada (Define o efeito "fade-in-up") */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Keyframes da animação de entrada */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Atrasos nas animações (Garantem que os elementos apareçam em sequência) */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-700 { animation-delay: 0.7s; }
+        .delay-900 { animation-delay: 0.9s; }
+        .delay-1000 { animation-delay: 1.0s; }
+        .delay-1100 { animation-delay: 1.1s; }
+        .delay-1200 { animation-delay: 1.2s; }
+        .delay-1300 { animation-delay: 1.3s; }
+        .delay-1400 { animation-delay: 1.4s; }
+
+
+        /* Estilo da Imagem de Perfil */
+        .profile-pic {
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            cursor: pointer;
+            box-shadow: 0 0 0 4px var(--card-bg);
+        }
+        /* Efeito hover da foto de perfil */
+        .profile-pic:hover {
+            transform: rotate(3deg) scale(1.05);
+            box-shadow: 0 0 0 4px var(--primary-purple), 0 0 25px rgba(217, 70, 239, 0.7);
+        }
+
+        /* Estilo dos Botões (Link-Button) */
+        .link-button {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            border: 2px solid transparent; 
+            position: relative; /* Necessário para posicionar o flash */
+            overflow: hidden; /* Garante que o flash só apareça dentro do botão */
+        }
+        
+        /* Efeito hover geral dos botões (flutuar e acender roxo) */
+        .link-button:hover {
+            transform: translateY(-5px) scale(1.03);
+            /* Brilho roxo para todos os botões no hover */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-purple);
+        }
+        
+        /* Efeito de Flash / Sweep para botões secundários */
+        .link-button:not(.main-link)::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%; /* Começa fora da esquerda */
+            width: 50%; /* Largura da faixa de luz */
+            height: 100%;
+            transform: skewX(-20deg); /* Faz a faixa ser diagonal */
+            /* Gradiente de luz branca suave */
+            background: linear-gradient(to right, 
+                rgba(255, 255, 255, 0) 0%, 
+                rgba(255, 255, 255, 0.3) 75%, 
+                rgba(255, 255, 255, 0) 100%
+            );
+            /* Transição para que o flash deslize suavemente */
+            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 20; /* Garante que fique por cima do texto */
+            pointer-events: none; /* Não interfere nos cliques */
+        }
+
+        /* Move o flash para a direita ao passar o mouse */
+        .link-button:not(.main-link):hover::before {
+            left: 150%; /* Termina fora da direita */
+        }
+
+
+        /* Estilo específico para o botão principal (Website/Portfólio) */
+        .main-link {
+            /* Fundo gradiente AZUL mantido */
+            background: linear-gradient(45deg, var(--primary-blue), #6366f1);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6); 
+        }
+        /* ATUALIZADO: Brilho ROXO e esfumaçado no hover do botão principal */
+        .main-link:hover {
+            /* Sombra escura (profundidade) + Brilho ROXO (uniformidade) */
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 30px var(--primary-purple); 
+        }
+        
+        /* Otimizações para Mobile (Garante responsividade) */
+        @media (max-width: 768px) {
+            .linktree-container {
+                max-width: 100%;
+                width: calc(100% - 1rem); 
+                margin: 0 auto;
+                padding: 1rem; 
+            }
+
+            h1 { font-size: 3rem; }
+            p { font-size: 0.9rem; }
+            .link-button { padding: 0.9rem; font-size: 1.05rem; }
+            .link-button i { font-size: 1.4rem; }
+            .profile-pic { width: 100px; height: 100px; }
+        }
+
+    </style>
+</head>
+<body class="text-white">
+
+    <!-- Container principal, centralizado na tela -->
+    <div id="linktree-container" class="linktree-container w-full max-w-xl mx-auto bg-gray-900 rounded-3xl relative overflow-hidden">
+        
+        <!-- HEADER / PERFIL -->
+        <header class="text-center mb-8 md:mb-10">
+            
+            <!-- Imagem de Perfil (com fallback para caso o link não funcione) -->
+            <img 
+                src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" 
+                alt="Foto de Perfil" 
+                class="profile-pic w-28 h-28 md:w-36 md:h-36 rounded-full mx-auto mb-4 md:mb-5 border-4 border-gray-600 object-cover animate-fade-in-up delay-100"
+                onerror="this.onerror=null; this.src='https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true'"
+            >
+            
+            <!-- TÍTULO PRINCIPAL: Gradiente restaurado para ser vibrante -->
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-1 md:mb-2 text-transparent bg-clip-text bg-gradient-to-r to-purple-300 from-fuchsia-400 animate-fade-in-up delay-300">
+                Marcelio Venancio
+            </h1>
+            
+            <!-- Subtítulo / Descrição de introdução -->
+            <p class="mt-4 md:mt-6 text-sm md:text-base text-gray-400 max-w-xs md:max-w-sm mx-auto animate-fade-in-up delay-700">
+                Entre no meu universo e descubra uma nova forma de criar, inovar e impactar.
+            </p>
+        </header>
+
+        <!-- LINKS -->
+        <main class="space-y-4 md:space-y-5">
+            
+            <!-- 1. WEBSITE (DESTAQUE - Botão Principal) -->
+            <a href="https://marceliovenancio.vercel.app/" target="_blank" class="link-button main-link flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-extrabold animate-fade-in-up delay-900">
+                <i class="fas fa-rocket mr-3 md:mr-4"></i> 
+                MEU WEBSITE | PORTFÓLIO
+            </a>
+
+            <!-- 2. INSTAGRAM (Botão secundário com efeito flash) -->
+            <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1000">
+                <i class="fab fa-instagram mr-3 md:mr-4"></i> 
+                Instagram
+            </a>
+
+            <!-- 3. TIKTOK (Botão secundário com efeito flash) -->
+            <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1100">
+                <i class="fab fa-tiktok mr-3 md:mr-4"></i> 
+                TikTok
+            </a>
+
+            <!-- 4. DISCORD (Botão secundário com efeito flash) -->
+            <a href="https://discord.gg/8acMfMjQ" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1200">
+                <i class="fab fa-discord mr-3 md:mr-4"></i> 
+                DISCORD (GoguenLounge)
+            </a>
+
+            <!-- 5. YOUTUBE (Botão secundário com efeito flash) -->
+            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1300">
+                <i class="fab fa-youtube mr-3 md:mr-4 text-red-500"></i> 
+                YouTube (Canal de musica)
+            </a>
+            
+        </main>
+
+        <!-- FOOTER -->
+        <footer class="mt-8 md:mt-12 text-center text-gray-300 text-xs md:text-sm animate-fade-in-up delay-1400">
+            <p>Curtiu? dá ideia.</p>
+            <p class="mt-1 text-xs text-gray-400">Desenvolvido por Marcelio</p>
+        </footer>
+    </div>
+
+    <!-- Script: Garante que as animações de entrada rodem apenas uma vez -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('.animate-fade-in-up');
+            animatedElements.forEach(el => {
+                el.addEventListener('animationend', () => {
+                    // Remove as classes de animação e atraso após a conclusão
+                    el.classList.remove('animate-fade-in-up', 'delay-100', 'delay-200', 'delay-300', 'delay-400', 'delay-500', 'delay-600', 'delay-700', 'delay-800', 'delay-900', 'delay-1000', 'delay-1100', 'delay-1200', 'delay-1300', 'delay-1400');
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
