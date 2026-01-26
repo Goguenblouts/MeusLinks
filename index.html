@@ -3,300 +3,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Título exibido na aba do navegador -->
     <title>⚡ Marcelio Venancio - O Portal do Futuro! ⚡</title>
-    <!-- Descrição para SEO e compartilhamento -->
-    <meta name="description" content="Acesse todas as minhas redes sociais, projetos e conteúdos de forma impactante e única, otimizada para o seu celular. Conecte-se com o futuro!">
+    <meta name="description" content="Acesse todas as minhas redes sociais, projetos e conteúdos de forma impactante e única.">
     
-    <!-- Tailwind CSS CDN: Framework para estilização rápida -->
+    <!-- Scripts e Fontes -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome CDN for Icons: Biblioteca de ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    <!-- Google Font: Inter: Fonte principal para o design -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Three.js para WebGL -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <style>
-        /* Variáveis de Cores (Definem a paleta para fácil alteração) */
         :root {
-            --primary-purple: #d510f3; /* Fuchsia */
-            --primary-blue: #3b82f6;   /* Blue-500 */
-            --dark-bg: #0d1117;        /* Fundo principal do Body */
-            --card-bg: #1a202c;        /* Fundo dos cards/container */
-            --text-light: #e2e8f0;     /* Texto claro */
+            --primary-purple: #d510f3;
+            --primary-blue: #3b82f6;
+            --card-bg: rgba(26, 32, 44, 0.85); /* Leve transparência para o WebGL brilhar */
+            --text-light: #e2e8f0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            /* Fundo gradiente animado para o body */
-            background: linear-gradient(-45deg, #10161d, #1a212e, #202736, #1a212e); 
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite; 
+            background-color: #05070a; /* Fundo base escuro */
             color: var(--text-light);
             min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1.5rem 0.5rem; 
-            overflow-x: hidden; 
-            position: relative;
+            padding: 1.5rem 0.5rem;
         }
 
-        /* Animação do gradiente de fundo */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Canvas fixado no fundo */
+        #webgl-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        /* CONTAINER PRINCIPAL COM BORDA DE ENERGIA PULSANTE */
         .linktree-container {
             position: relative;
             z-index: 10;
-            padding: 1.5rem; 
+            padding: 2rem; 
             border-radius: 1.5rem;
             background-color: var(--card-bg); 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(12px); /* Efeito de vidro */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* EFEITO DE BORDA ANIMADA (Camada 1 - Blur para o brilho) */
+        /* Borda animada neon */
         .linktree-container::before {
             content: '';
             position: absolute;
-            top: -3px; right: -3px; bottom: -3px; left: -3px; 
-            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue), #6366f1, #d946ef);
+            top: -2px; right: -2px; bottom: -2px; left: -2px; 
+            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue), #d946ef);
             background-size: 300% 300%;
-            filter: blur(3px); 
-            border-radius: 1.7rem; 
+            border-radius: 1.6rem; 
             z-index: -1;
             animation: pulseBorder 5s ease infinite alternate, gradientBorder 10s ease infinite;
+            opacity: 0.5;
         }
 
-        /* EFEITO DE BORDA ANIMADA (Camada 2 - Borda nítida) */
-        .linktree-container::after {
-            content: '';
-            position: absolute;
-            top: -2px; right: -2px; bottom: -2px; left: -2px;
-            background: linear-gradient(45deg, var(--primary-blue), var(--primary-purple));
-            background-size: 200% 200%;
-            border-radius: 1.6rem;
-            z-index: -1;
-            animation: gradientBorder 4s ease infinite reverse;
-            opacity: 0.9;
-        }
-
-        /* Animação para movimentar o gradiente da borda */
         @keyframes gradientBorder {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Animação de pulsação da opacidade da borda */
         @keyframes pulseBorder {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
         }
 
-
-        /* Animações de entrada (Define o efeito "fade-in-up") */
+        /* Animações de Entrada */
         .animate-fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
+            animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
         }
 
-        /* Keyframes da animação de entrada */
         @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Atrasos nas animações (Garantem que os elementos apareçam em sequência) */
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        .delay-500 { animation-delay: 0.5s; }
-        .delay-700 { animation-delay: 0.7s; }
-        .delay-900 { animation-delay: 0.9s; }
-        .delay-1000 { animation-delay: 1.0s; }
-        .delay-1100 { animation-delay: 1.1s; }
-        .delay-1200 { animation-delay: 1.2s; }
-        .delay-1300 { animation-delay: 1.3s; }
-        .delay-1400 { animation-delay: 1.4s; }
 
-
-        /* Estilo da Imagem de Perfil */
         .profile-pic {
             transition: transform 0.5s ease, box-shadow 0.5s ease;
-            cursor: pointer;
-            box-shadow: 0 0 0 4px var(--card-bg);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
+            object-fit: cover;
         }
-        /* Efeito hover da foto de perfil */
+        
         .profile-pic:hover {
             transform: rotate(3deg) scale(1.05);
-            box-shadow: 0 0 0 4px var(--primary-purple), 0 0 25px rgba(217, 70, 239, 0.7);
+            box-shadow: 0 0 0 4px var(--primary-purple), 0 0 30px rgba(213, 16, 243, 0.4);
         }
 
-        /* Estilo dos Botões (Link-Button) */
         .link-button {
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            border: 2px solid transparent; 
-            position: relative; /* Necessário para posicionar o flash */
-            overflow: hidden; /* Garante que o flash só apareça dentro do botão */
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            position: relative;
         }
         
-        /* Efeito hover geral dos botões (flutuar e acender roxo) */
         .link-button:hover {
-            transform: translateY(-5px) scale(1.03);
-            /* Brilho roxo para todos os botões no hover */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-purple);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(213, 16, 243, 0.3);
+            border-color: rgba(255,255,255,0.3);
         }
         
-        /* Efeito de Flash / Sweep para botões secundários */
-        .link-button:not(.main-link)::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%; /* Começa fora da esquerda */
-            width: 50%; /* Largura da faixa de luz */
-            height: 100%;
-            transform: skewX(-20deg); /* Faz a faixa ser diagonal */
-            /* Gradiente de luz branca suave */
-            background: linear-gradient(to right, 
-                rgba(255, 255, 255, 0) 0%, 
-                rgba(255, 255, 255, 0.3) 75%, 
-                rgba(255, 255, 255, 0) 100%
-            );
-            /* Transição para que o flash deslize suavemente */
-            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 20; /* Garante que fique por cima do texto */
-            pointer-events: none; /* Não interfere nos cliques */
+        .main-link { background: linear-gradient(45deg, var(--primary-blue), #6366f1); }
+        .ia-btn { background: linear-gradient(45deg, #a855f7, #d946ef); }
+
+        .prompt-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
         }
 
-        /* Move o flash para a direita ao passar o mouse */
-        .link-button:not(.main-link):hover::before {
-            left: 150%; /* Termina fora da direita */
+        .prompt-card:hover {
+            border-color: var(--primary-purple);
+            background: rgba(213, 16, 243, 0.1);
         }
 
-
-        /* Estilo específico para o botão principal (Website/Portfólio) */
-        .main-link {
-            /* Fundo gradiente AZUL mantido */
-            background: linear-gradient(45deg, var(--primary-blue), #6366f1);
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.6); 
-        }
-        /* ATUALIZADO: Brilho ROXO e esfumaçado no hover do botão principal */
-        .main-link:hover {
-            /* Sombra escura (profundidade) + Brilho ROXO (uniformidade) */
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.8), 0 0 30px var(--primary-purple); 
-        }
-        
-        /* Otimizações para Mobile (Garante responsividade) */
-        @media (max-width: 768px) {
-            .linktree-container {
-                max-width: 100%;
-                width: calc(100% - 1rem); 
-                margin: 0 auto;
-                padding: 1rem; 
-            }
-
-            h1 { font-size: 3rem; }
-            p { font-size: 0.9rem; }
-            .link-button { padding: 0.9rem; font-size: 1.05rem; }
-            .link-button i { font-size: 1.4rem; }
-            .profile-pic { width: 100px; height: 100px; }
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--primary-purple);
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 14px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+
+        .hidden { display: none; }
     </style>
 </head>
-<body class="text-white">
+<body>
 
-    <!-- Container principal, centralizado na tela -->
-    <div id="linktree-container" class="linktree-container w-full max-w-xl mx-auto bg-gray-900 rounded-3xl relative overflow-hidden">
-        
-        <!-- HEADER / PERFIL -->
-        <header class="text-center mb-8 md:mb-10">
-            
-            <!-- Imagem de Perfil (com fallback para caso o link não funcione) -->
-            <img 
-                src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" 
-                alt="Foto de Perfil" 
-                class="profile-pic w-28 h-28 md:w-36 md:h-36 rounded-full mx-auto mb-4 md:mb-5 border-4 border-gray-600 object-cover animate-fade-in-up delay-100"
-                onerror="this.onerror=null; this.src='https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true'"
-            >
-            
-            <!-- TÍTULO PRINCIPAL: Gradiente restaurado para ser vibrante -->
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-1 md:mb-2 text-transparent bg-clip-text bg-gradient-to-r to-purple-300 from-fuchsia-400 animate-fade-in-up delay-300">
-                Marcelio Venancio
-            </h1>
-            
-            <!-- Subtítulo / Descrição de introdução -->
-            <p class="mt-4 md:mt-6 text-sm md:text-base text-gray-400 max-w-xs md:max-w-sm mx-auto animate-fade-in-up delay-700">
-                Entre no meu universo e descubra uma nova forma de criar, inovar e impactar.
-            </p>
+    <!-- WebGL Background Canvas -->
+    <canvas id="webgl-bg"></canvas>
+
+    <div id="toast">Prompt copiado com sucesso! 🚀</div>
+
+    <!-- PÁGINA PRINCIPAL (HOME) -->
+    <div id="home-view" class="linktree-container w-full max-w-lg mx-auto relative">
+        <header class="text-center mb-8">
+            <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Perfil" class="profile-pic w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 animate-fade-in-up delay-100">
+            <h1 class="text-4xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-300 animate-fade-in-up delay-200">Marcelio Venancio</h1>
+            <p class="text-sm text-gray-400 animate-fade-in-up delay-300">Explorando as fronteiras da IA e Criatividade.</p>
         </header>
 
-        <!-- LINKS -->
-        <main class="space-y-4 md:space-y-5">
-            
-            <!-- 1. WEBSITE (DESTAQUE - Botão Principal) -->
-            <a href="https://marceliovenancio.vercel.app/" target="_blank" class="link-button main-link flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-extrabold animate-fade-in-up delay-900">
-                <i class="fas fa-rocket mr-3 md:mr-4"></i> 
-                MEU WEBSITE | PORTFÓLIO
+        <main class="space-y-4 mb-8">
+            <a href="https://marceliovenancio.vercel.app/" target="_blank" class="link-button main-link flex items-center justify-center w-full p-4 rounded-xl text-lg font-extrabold animate-fade-in-up">
+                <i class="fas fa-rocket mr-3"></i> MEU WEBSITE | PORTFÓLIO
             </a>
 
-            <!-- 2. INSTAGRAM (Botão secundário com efeito flash) -->
-            <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1000">
-                <i class="fab fa-instagram mr-3 md:mr-4"></i> 
-                Instagram
+            <div class="grid grid-cols-2 gap-3 animate-fade-in-up">
+                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/60 border border-gray-700">
+                    <i class="fab fa-instagram mr-2"></i> Instagram
+                </a>
+                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/60 border border-gray-700">
+                    <i class="fab fa-tiktok mr-2"></i> TikTok
+                </a>
+            </div>
+
+            <a href="https://discord.gg/bzN88hAq" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/60 border border-gray-700 animate-fade-in-up">
+                <i class="fab fa-discord mr-3"></i> Discord (GoguenLounge)
             </a>
 
-            <!-- 3. TIKTOK (Botão secundário com efeito flash) -->
-            <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1100">
-                <i class="fab fa-tiktok mr-3 md:mr-4"></i> 
-                TikTok
+            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/60 border border-gray-700 animate-fade-in-up">
+                <i class="fab fa-youtube mr-3 text-red-500"></i> YouTube (Canal de Música)
             </a>
 
-            <!-- 4. DISCORD (Botão secundário com efeito flash) -->
-            <a href="https://discord.gg/8acMfMjQ" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1200">
-                <i class="fab fa-discord mr-3 md:mr-4"></i> 
-                DISCORD (GoguenLounge)
-            </a>
-
-            <!-- 5. YOUTUBE (Botão secundário com efeito flash) -->
-            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 md:p-5 rounded-xl text-lg md:text-xl font-semibold bg-gray-800 text-white border-2 border-gray-700 hover:border-fuchsia-500 animate-fade-in-up delay-1300">
-                <i class="fab fa-youtube mr-3 md:mr-4 text-red-500"></i> 
-                YouTube (Canal de musica)
-            </a>
-            
+            <button onclick="toggleView('ia-view')" class="link-button ia-btn flex items-center justify-center w-full p-5 rounded-xl text-lg font-black shadow-lg animate-fade-in-up">
+                <i class="fas fa-brain mr-3"></i> IA LAB: VER TODOS OS PROMPTS
+            </button>
         </main>
 
-        <!-- FOOTER -->
-        <footer class="mt-8 md:mt-12 text-center text-gray-300 text-xs md:text-sm animate-fade-in-up delay-1400">
-            <p>Curtiu? dá ideia.</p>
-            <p class="mt-1 text-xs text-gray-400">Desenvolvido por Marcelio</p>
+        <!-- DESTAQUES RÁPIDOS -->
+        <section class="mt-8 animate-fade-in-up">
+            <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-3 text-center italic">Destaques da Trend</p>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="prompt-card rounded-xl overflow-hidden p-2">
+                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/300?text=Prompt+1'">
+                </div>
+                <div class="prompt-card rounded-xl overflow-hidden p-2">
+                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/300?text=Prompt+2'">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PÁGINA COMPLETA: IA LAB -->
+    <div id="ia-view" class="linktree-container w-full max-w-lg mx-auto relative hidden">
+        <header class="flex items-center justify-between mb-8">
+            <button onclick="toggleView('home-view')" class="text-gray-400 hover:text-white transition-all">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </button>
+            <h2 class="text-2xl font-black text-fuchsia-500 tracking-tighter">IA LAB PROMPTS</h2>
+            <div class="w-6"></div> 
+        </header>
+
+        <div class="bg-blue-900/20 p-5 rounded-2xl border border-blue-500/20 mb-8">
+            <h3 class="text-sm font-bold text-blue-400 mb-3 flex items-center">
+                <i class="fas fa-info-circle mr-2 text-base"></i> COMO UTILIZAR?
+            </h3>
+            <ul class="text-[11px] text-gray-300 space-y-3 leading-relaxed">
+                <li>1. Escolha uma das imagens abaixo que você curtiu.</li>
+                <li>2. Clique no botão <span class="text-fuchsia-400 font-bold uppercase">Copiar Prompt</span>.</li>
+                <li>3. Abra sua ferramenta de IA (Chat GPT, Gemini e outras).</li>
+                <li>4. Coloque sua foto e uma foto de referência (personagem).</li>
+                <li>5. Cole o texto e gere sua própria versão!</li>
+            </ul>
+        </div>
+
+        <!-- GRID DE 8 CARDS -->
+        <div class="grid grid-cols-2 gap-4">
+            
+            <!-- Card 1 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+1'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: traje de Qin Shi Huang do anime Record of Ragnarok</p>
+                <button id="btn-lab-1" onclick="copyPrompt('Crie uma imagem minha usando o traje de Qin Shi Huang do anime Record of Ragnarok, incluindo seu design de venda e as roupas imperiais que ele usa no anime. Pose-me em sua postura icônica. A imagem deve ser caracterizada por iluminação cinematográfica nítida e contraste intenso, capturada de um ângulo ligeiramente baixo voltado para cima que dramatiza a mandíbula e o pescoço, evocando domínio silencioso e elegância escultural. O fundo é um vermelho carmesim profundo e saturado, criando um choque visual ousado com a pele luminosa e o traje escuro do sujeito. A iluminação é fortemente direcional, lançando destaques dourados quentes em um lado do rosto enquanto mergulha o outro na sombra aveludada, enfatizando a estrutura óssea com quase precisão arquitetônica. A expressão do sujeito é ilegível olhos em tons frios semicerrados, lábios relaxados sugerindo desapego oυ desafio silencioso. O traje é altamente detalhado, realista e fiel ao anime, usando cores e texturas semelhantes a Record of Ragnarok. As roupas devem parecer ricamente texturizadas e visualmente marcantes. Preserve minha estrutura facial exata, penteado e cor de cabelo o mais próximo possível da foto de referência. Retoque mínimo deve ser aplicado para reter a textura natural da pele e imperfeições sutis para o realismo. Não há adereços ou acessórios adicionais além daqueles intrínsecos ao design de Qin Shi Huang. O impacto visual deve depender puramente de luz, shadow, saturação de cor e postura, evocando alta moda, isolamento contemporâneo e masculinidade hipermoderna.', 'btn-lab-1')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+2'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing Columbina's costume from the anime game Genshin Impact</p>
+                <button id="btn-lab-2" onclick="copyPrompt('Create an image of me wearing Columbinas costume from the anime game Genshin Impact, including her signature blindfold design, her wings in the back of head, and the imperial clothing he wears in the anime. Pose me in her iConic stance. The image should be characterized by stark cinematic lighting and intense contrast, captured from a slightly low, upward-facing angle that dramatizes the jawline and neck, evoking quiet dominance and sculptural elegance. The background is a deep, saturated dark blue, creating a bold visual clash with the subjects luminous skin and light attire. Lighting is tightly directional, casting warm finger highlights on one side of the face while pointing his finger into velvety shadow,emphasizing bone structure with near architectural precision. The subjects expression is unreadable- cool-toned eyes half-lidded, lips relaxed- suggesting detachment or quiet defiance. The costume is highly detailed, realistic, and faithful to the anime, using colors and textures similar to Genshin Impact. The garments should appear richly textured and visually striking. Preserve my exact facial structure, hairstyle, and hair color as closely as possible to the reference photo. Minimal retouching should be applied to retain natural skin texture and subtle imperfections for realism. There are no additional props or accessories beyond those intrinsic to Columbina design. The visual impact should rely purely on light, shadow, color saturation, and posture, evoking high fashion, and contemporary isolation.', 'btn-lab-2')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+3'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth</p>
+                <button id="btn-lab-3" onclick="copyPrompt('Create an image of me as Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet, shoulder plates and arm guards. Pose me exactly like the reference image, with the arm raised in front of the body and the torso slightly turned, conveying strength, discipline and calm power. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the chest, jawline and heroic posture. The background must be a deep emerald green mixed with dark shadows and subtle cosmic energy, matching the Dragon theme. Lighting is tightly directional, highlighting the metallic reflections of the armor and casting dramatic shadows to sculpt the muscles and armor plates with precision. The expression should be serious and focused, eyes determined, conveying inner strength and honor. The armor must be highly detailed, realistic, and faithful to the anime’s original colors and textures, with polished emerald metal, sharp edges and glowing highlights. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture. 1No additional props or accessories beyond Shiryu’s Dragon Armor. The visual impact should rely purely on posture, armor design, lighting and color contrast, evoking epic anime heroism and quiet dominance.', 'btn-lab-3')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+4'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco)</p>
+                <button id="btn-lab-4" onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. ⚠️ Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura dourada. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante, peito aberto e ombros firmes, transmitindo heroísmo, coragem, honra e poder sereno. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença divina. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas do ouro da armadura – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um dourado luminoso misturado com tons de amarelo e verde-oliva, com aura cósmica intensa, energia dourada pulsando ao redor do corpo, partículas de luz e névoa suave, evocando o Cosmo de Sagitário, sem roubar foco do personagem. A armadura deve apresentar: – Ouro polido de alto brilho – Texturas realistas de metal nobre – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos quentes e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser séria, confiante e determinada, olhar firme e calmo, transmitindo liderança, justiça, honra e espírito protetor. ❌ Não incluir arco, flecha, armas, personagens extras ou acessórios fora da Armadura de Ouro de Sagitário. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'btn-lab-4')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/EREN%20AOT.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+5'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing the exact uniform of the Survey Corps from the anime Attack on Titan (Shingeki no Kyojin)</p>
+                <button id="btn-lab-5" onclick="copyPrompt('Create an image of me wearing the exact uniform of the Survey Corps from the anime Attack on Titan (Shingeki no Kyojin), including the green hooded cloak with the Wings of Freedom emblem on the back, the brown cropped jacket, beige shirt, white pants with dark leather harness straps, knee-high brown boots, and full 3D maneuver gear at the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing with the body turned slightly away and looking back over the shoulder, one sword held low behind the body, cloak flowing in the wind, conveying vigilance, determination and quiet readiness. The image should feature dramatic cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the silhouette, cape movement and heroic stance. The background should be minimal or softly blurred, with neutral tones or a pale sky, keeping focus on the character and cloak. Lighting must be realistic and directional, creating natural highlights on the leather straps, metallic blades and maneuver gear, and soft shadows on the fabric folds of the cloak and uniform. The expression should be serious and alert, eyes sharp and focused, lips neutral, conveying discipline and inner resolve. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and textures — deep forest green cloak, warm brown leather harness, matte steel blades, and slightly worn military fabric. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to maintain natural skin texture. No additional props beyond the standard Survey Corps equipment. The visual impact should rely purely on posture, cloak movement, lighting and color contrast, evoking military realism, anime heroism and quiet dominance.', 'btn-lab-5')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/EREN%20AOT%202.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+6'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing the exact Survey Corps uniform from the anime Attack on Titan (Shingeki no Kyojin)</p>
+                <button id="btn-lab-6" onclick="copyPrompt('Create an image of me wearing the exact Survey Corps uniform from the anime Attack on Titan (Shingeki no Kyojin), including the brown cropped military jacket, beige shirt, leather chest harness, white pants with dark leather straps, knee-high brown boots, and full 3D maneuver gear attached to the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing in a confident frontal stance with one hand raised near the chest and the other relaxed at the side, conveying determination and leadership. Frame the camera closer to the character, from mid-thigh to head, with a slight zoom-in to emphasize the face, torso and maneuver gear details. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to enhance the heroic presence and facial expression. The background must be a deep emerald green with subtle dark gradients and soft atmospheric light, creating a dramatic contrast with the brown and beige uniform. Lighting must be realistic and directional, highlighting the leather texture of the jacket and straps, the metallic reflections of the maneuver gear, and natural skin tones, while casting soft shadows to sculpt the body and clothing folds. The expression should be fierce and determined, brows slightly furrowed, eyes sharp and focused, mouth slightly open as if mid-command, conveying resolve and inner strength. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and materials — warm brown leather, matte military fabric, worn boots, brushed steel mechanisms. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture and imperfections. No additional props beyond the standard Survey Corps equipment. The visual impact should rely on posture, realistic textures, lighting and emerald green color contrast, evoking military heroism, anime intensity and quiet dominance.', 'btn-lab-6')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/KIRITO%20SAO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+7'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing Kirito’s iconic outfit from Sword Art Online</p>
+                <button id="btn-lab-7" onclick="copyPrompt('Create an ultra-realistic cinematic image of me wearing Kirito’s iconic outfit from Sword Art Online, redesigned with high-fidelity realism. The long black coat must be made of realistic heavy fabric with visible stitching, layered leather reinforcements, subtle wear marks, seams, folds and natural fabric tension. The silver trims should appear as brushed metal embroidery integrated into the coat. Underneath, include a fitted tactical black combat suit with leather straps, buckles and reinforced armor panels. Equip me with Kirito’s sword in a hyper-detailed realistic style: a polished steel blade with micro-scratches, sharp reflective edges, engraved runes near the guard, and a complex metallic hilt with leather grip wrapping. The second sword (if present) should match the same realistic craftsmanship and weight. Pose me exactly like the reference image, in a low crouched combat stance, one sword raised above the head ready to strike and the other angled forward defensively, body twisted with visible muscle tension, conveying speed, precision and lethal focus. The image must feature dramatic cinematic lighting with intense contrast, captured from a slightly low, upward-facing angle to emphasize anatomy, armor layering and weapon scale. The background should be a dark fantasy interior with deep shadows, cold blue flames and floating glowing embers, creating depth and motion. Lighting should be physically realistic and directional, producing sharp specular highlights on the steel blades, soft reflections on leather and fabric, and natural shadow gradients across the face and body. Add subtle motion blur on sparks and cloth edges to enhance realism. The expression must be intense and determined, brows slightly furrowed, eyes sharp and focused, jaw clenched. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep pores, skin texture and natural imperfections visible. No fantasy exaggerations beyond the original SAO design. The final result should look like a high-budget live-action anime adaptation, ultra-realistic, highly detailed, cinematic, and physically believable.', 'btn-lab-7')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="prompt-card rounded-2xl p-3">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IMPERADOR%20HIROHITO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+8'">
+                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: traje imperial inspirado no Imperador Hirohito do Japão</p>
+                <button id="btn-lab-8" onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim vestindo um traje imperial inspirado no Imperador Hirohito do Japão, incorporando fielmente o design visual do personagem de Mobile Legends mostrado na referência, mantendo o estilo nobre, militar e cerimonial. ⚠️ Fidelidade facial absoluta: Preservar exatamente meu rosto da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, mandíbula, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não estilizar, não suavizar. Integração perfeita do rosto humano real com o traje imperial. Retoques mínimos, mantendo poros e microtexturas realistas. O traje deve incluir: – Uniforme preto imperial de corte militar elegante – Faixa diagonal vermelha intensa atravessando o peito – Capa longa vermelha profunda presa ao ombro – Correntes metálicas prateadas realistas no peito e cintura – Broches, medalhas e ornamentos metálicos finamente detalhados – Luvas pretas e botas militares altas de couro polido Tudo com tecidos realistas, costuras visíveis, caimento pesado, aparência nobre e funcional, sem aparência de cosplay. Pose: Reproduzir a pose icônica imperial da referência, postura ereta e dominante, tronco levemente inclinado para frente, um braço posicionado com autoridade, transmitindo poder absoluto, liderança, frieza e presença imperial. Câmera: Ângulo levemente baixo (low angle), apontada para cima, reforçando imponência, mandíbula, ombros e presença de imperador. Iluminação: Iluminação cinematográfica extrema, alto contraste, estilo chiaroscuro: – Luz principal forte lateral destacando rosto e torso – Sombras profundas criando drama e autoridade – Reflexos realistas nos metais, correntes e botões – Destaque no vermelho da capa e faixa Fundo: Fundo neutro escuro ou interior palaciano minimalista desfocado, sem distrações, mantendo foco total no personagem. Expressão: Séria, fria e dominante. Olhar firme e penetrante, lábios neutros, expressão de comando absoluto e autocontrole. Estilo visual: Ultrarrealismo cinematográfico, nível Hollywood VFX, qualidade de filme AAA, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e nos detalhes do traje. ❌ Não adicionar personagens extras, armas modernas, armas de fogo ou acessórios fora do traje imperial.', 'btn-lab-8')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                    <i class="far fa-copy"></i> COPIAR PROMPT
+                </button>
+            </div>
+
+        </div>
+
+        <footer class="mt-12 text-center pb-8 border-t border-white/5 pt-10">
+            <div class="mb-8 px-4">
+                <p class="text-sm font-bold text-white mb-1">Deseja um personagem específico?</p>
+                <p class="text-xs text-gray-400">Entre em contato pela DM, assim conversamos para saber qual você deseja!</p>
+            </div>
+            <div class="flex justify-center gap-10 mb-10">
+                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="text-white hover:text-fuchsia-400 transform hover:scale-125 transition-all"><i class="fab fa-tiktok text-3xl"></i></a>
+                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="text-white hover:text-blue-400 transform hover:scale-125 transition-all"><i class="fab fa-instagram text-3xl"></i></a>
+            </div>
+            <button onclick="toggleView('home-view')" class="text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors underline decoration-fuchsia-500 underline-offset-4">Voltar ao Início</button>
         </footer>
     </div>
 
-    <!-- Script: Garante que as animações de entrada rodem apenas uma vez -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const animatedElements = document.querySelectorAll('.animate-fade-in-up');
-            animatedElements.forEach(el => {
+        // --- WEBGL BACKGROUND LOGIC ---
+        let scene, camera, renderer, particles;
+        let mouseX = 0, mouseY = 0;
+
+        function initWebGL() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 5;
+
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-bg'), antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Criar campo de partículas
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 3000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.015,
+                color: '#d510f3',
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+
+            // Adicionar uma segunda camada de partículas azuis para contraste
+            const particles2 = new THREE.Points(
+                particlesGeometry.clone(),
+                new THREE.PointsMaterial({ size: 0.01, color: '#3b82f6', transparent: true, opacity: 0.5 })
+            );
+            particles2.rotation.y = Math.PI;
+            scene.add(particles2);
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2) / 100;
+                mouseY = (e.clientY - window.innerHeight / 2) / 100;
+            });
+
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+
+            // Suave efeito de parallax baseado no mouse
+            scene.rotation.y += (mouseX - scene.rotation.y) * 0.05;
+            scene.rotation.x += (mouseY - scene.rotation.x) * 0.05;
+
+            renderer.render(scene, camera);
+        }
+
+        // --- UI LOGIC ---
+        function toggleView(viewId) {
+            const home = document.getElementById('home-view');
+            const ia = document.getElementById('ia-view');
+            
+            if (viewId === 'ia-view') {
+                home.classList.add('hidden');
+                ia.classList.remove('hidden');
+            } else {
+                ia.classList.add('hidden');
+                home.classList.remove('hidden');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function copyPrompt(text, btnId) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            
+            try {
+                if (document.execCommand('copy')) {
+                    showToast();
+                    const btn = document.getElementById(btnId);
+                    const originalContent = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> COPIADO!';
+                    btn.classList.replace('bg-gray-700', 'bg-green-600');
+                    setTimeout(() => {
+                        btn.innerHTML = originalContent;
+                        btn.classList.replace('bg-green-600', 'bg-gray-700');
+                    }, 2000);
+                }
+            } catch (err) { console.error('Erro ao copiar', err); }
+            document.body.removeChild(textArea);
+        }
+
+        function showToast() {
+            const toast = document.getElementById("toast");
+            toast.className = "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        window.onload = () => {
+            initWebGL();
+            document.querySelectorAll('.animate-fade-in-up').forEach(el => {
                 el.addEventListener('animationend', () => {
-                    // Remove as classes de animação e atraso após a conclusão
-                    el.classList.remove('animate-fade-in-up', 'delay-100', 'delay-200', 'delay-300', 'delay-400', 'delay-500', 'delay-600', 'delay-700', 'delay-800', 'delay-900', 'delay-1000', 'delay-1100', 'delay-1200', 'delay-1300', 'delay-1400');
                     el.style.opacity = '1';
                     el.style.transform = 'translateY(0)';
                 });
             });
-        });
+        };
     </script>
 
 </body>
