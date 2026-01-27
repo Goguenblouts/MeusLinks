@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Marcelio Venancio - O Portal do Futuro! ⚡</title>
+    <title>⚡ Marcelio Venancio | IA • Arte • Anime ⚡</title>
     <meta name="description" content="Acesse todas as minhas redes sociais, projetos e conteúdos de forma impactante e única.">
     
     <!-- Scripts e Fontes -->
@@ -17,13 +17,14 @@
         :root {
             --primary-purple: #d510f3;
             --primary-blue: #3b82f6;
-            --card-bg: rgba(26, 32, 44, 0.85); /* Leve transparência para o WebGL brilhar */
+            --gold: #ffd700;
+            --card-bg: rgba(13, 17, 23, 0.6); 
             --text-light: #e2e8f0;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #05070a; /* Fundo base escuro */
+            background-color: #05070a; 
             color: var(--text-light);
             min-height: 100vh;
             margin: 0;
@@ -34,13 +35,9 @@
             padding: 1.5rem 0.5rem;
         }
 
-        /* Canvas fixado no fundo */
         #webgl-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
         }
@@ -51,12 +48,12 @@
             padding: 2rem; 
             border-radius: 1.5rem;
             background-color: var(--card-bg); 
-            backdrop-filter: blur(12px); /* Efeito de vidro */
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); 
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Borda animada neon */
+        /* Borda Neon */
         .linktree-container::before {
             content: '';
             position: absolute;
@@ -66,7 +63,7 @@
             border-radius: 1.6rem; 
             z-index: -1;
             animation: pulseBorder 5s ease infinite alternate, gradientBorder 10s ease infinite;
-            opacity: 0.5;
+            opacity: 0.4;
         }
 
         @keyframes gradientBorder {
@@ -75,29 +72,20 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes pulseBorder {
-            0% { opacity: 0.3; }
-            100% { opacity: 0.6; }
-        }
+        @keyframes pulseBorder { 0% { opacity: 0.2; } 100% { opacity: 0.5; } }
 
-        /* Animações de Entrada */
         .animate-fade-in-up {
             animation: fadeInUp 0.6s ease-out forwards;
             opacity: 0;
             transform: translateY(20px);
         }
 
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
         .profile-pic {
-            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            transition: all 0.5s ease;
             box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
-            object-fit: cover;
+            cursor: pointer;
         }
         
         .profile-pic:hover {
@@ -107,8 +95,6 @@
 
         .link-button {
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
             position: relative;
         }
@@ -116,15 +102,30 @@
         .link-button:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(213, 16, 243, 0.3);
-            border-color: rgba(255,255,255,0.3);
         }
         
         .main-link { background: linear-gradient(45deg, var(--primary-blue), #6366f1); }
         .ia-btn { background: linear-gradient(45deg, #a855f7, #d946ef); }
 
+        .zodiac-btn {
+            background: linear-gradient(45deg, #936639, #ffd700, #b8860b);
+            background-size: 200% 200%;
+            animation: goldFlow 3s linear infinite;
+            color: #000;
+            font-weight: 900;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+            border: 2px solid #fff;
+        }
+
+        @keyframes goldFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .prompt-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             transition: all 0.3s ease;
             backdrop-filter: blur(4px);
         }
@@ -132,6 +133,39 @@
         .prompt-card:hover {
             border-color: var(--primary-purple);
             background: rgba(213, 16, 243, 0.1);
+        }
+
+        .prompt-card img {
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        .prompt-card img:hover {
+            opacity: 0.8;
+        }
+
+        /* Modal Generico */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(15px);
+        }
+
+        /* Modal de Imagem Especifico */
+        #image-viewer-modal {
+            cursor: zoom-out;
+        }
+        #image-viewer-modal img {
+            max-width: 95%;
+            max-height: 90vh;
+            border-radius: 1rem;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            cursor: default;
         }
 
         #toast {
@@ -143,12 +177,10 @@
             border-radius: 50px;
             padding: 14px;
             position: fixed;
-            z-index: 1000;
-            left: 50%;
-            bottom: 30px;
+            z-index: 2001;
+            left: 50%; bottom: 30px;
             transform: translateX(-50%);
             font-weight: bold;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
@@ -161,17 +193,49 @@
 </head>
 <body>
 
-    <!-- WebGL Background Canvas -->
     <canvas id="webgl-bg"></canvas>
 
-    <div id="toast">Prompt copiado com sucesso! 🚀</div>
+    <!-- MODAL DE VISUALIZAÇÃO DE IMAGEM -->
+    <div id="image-viewer-modal" class="modal-overlay" onclick="closeImageViewer()">
+        <button class="absolute top-5 right-5 text-white text-3xl hover:text-fuchsia-500 transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="full-res-image" src="" alt="Visualização" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- MODAL SOCIAL LOCK -->
+    <div id="social-lock" class="modal-overlay">
+        <div class="bg-gray-900 border border-fuchsia-500 p-8 rounded-3xl max-w-sm w-full text-center shadow-2xl">
+            <i class="fas fa-lock text-4xl text-fuchsia-500 mb-4"></i>
+            <h3 class="text-xl font-black mb-2">CONTEÚDO BLOQUEADO</h3>
+            <p class="text-sm text-gray-400 mb-6">Para liberar os prompts exclusivos, siga-me nas redes sociais! 🚀</p>
+            
+            <div class="flex flex-col gap-3 mb-6">
+                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" onclick="markStep(1)" class="flex items-center justify-between bg-gradient-to-r from-purple-600 to-pink-600 p-3 rounded-xl font-bold transition-transform hover:scale-105">
+                    <span><i class="fab fa-instagram mr-2"></i> Seguir no Insta</span>
+                    <i id="check-1" class="far fa-circle"></i>
+                </a>
+                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" onclick="markStep(2)" class="flex items-center justify-between bg-black border border-gray-700 p-3 rounded-xl font-bold transition-transform hover:scale-105">
+                    <span><i class="fab fa-tiktok mr-2"></i> Seguir no TikTok</span>
+                    <i id="check-2" class="far fa-circle"></i>
+                </a>
+            </div>
+
+            <button id="unlock-btn" onclick="checkUnlock()" class="w-full p-4 rounded-xl bg-gray-800 text-gray-500 font-black cursor-not-allowed opacity-50 transition-all">
+                DESBLOQUEAR ACESSO
+            </button>
+            <button onclick="closeLock()" class="mt-4 text-[10px] text-gray-600 uppercase underline">Voltar</button>
+        </div>
+    </div>
+
+    <div id="toast">Copiado para o clipboard! 🚀</div>
 
     <!-- PÁGINA PRINCIPAL (HOME) -->
     <div id="home-view" class="linktree-container w-full max-w-lg mx-auto relative">
         <header class="text-center mb-8">
-            <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Perfil" class="profile-pic w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 animate-fade-in-up delay-100">
-            <h1 class="text-4xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-300 animate-fade-in-up delay-200">Marcelio Venancio</h1>
-            <p class="text-sm text-gray-400 animate-fade-in-up delay-300">Explorando as fronteiras da IA e Criatividade.</p>
+            <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Perfil" class="profile-pic w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 animate-fade-in-up" onclick="openImageViewer(this.src)">
+            <h1 class="text-4xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-300 animate-fade-in-up">Marcelio Venancio</h1>
+            <p class="text-sm text-gray-400 animate-fade-in-up">Explorando as fronteiras da IA e Criatividade.</p>
         </header>
 
         <main class="space-y-4 mb-8">
@@ -180,36 +244,35 @@
             </a>
 
             <div class="grid grid-cols-2 gap-3 animate-fade-in-up">
-                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/60 border border-gray-700">
+                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/40 border border-gray-700">
                     <i class="fab fa-instagram mr-2"></i> Instagram
                 </a>
-                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/60 border border-gray-700">
+                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/40 border border-gray-700">
                     <i class="fab fa-tiktok mr-2"></i> TikTok
                 </a>
             </div>
 
-            <a href="https://discord.gg/bzN88hAq" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/60 border border-gray-700 animate-fade-in-up">
+            <a href="https://discord.gg/bzN88hAq" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/40 border border-gray-700 animate-fade-in-up">
                 <i class="fab fa-discord mr-3"></i> Discord (GoguenLounge)
             </a>
 
-            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/60 border border-gray-700 animate-fade-in-up">
+            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/40 border border-gray-700 animate-fade-in-up">
                 <i class="fab fa-youtube mr-3 text-red-500"></i> YouTube (Canal de Música)
             </a>
 
-            <button onclick="toggleView('ia-view')" class="link-button ia-btn flex items-center justify-center w-full p-5 rounded-xl text-lg font-black shadow-lg animate-fade-in-up">
+            <button onclick="openIAView()" class="link-button ia-btn flex items-center justify-center w-full p-5 rounded-xl text-lg font-black shadow-lg animate-fade-in-up">
                 <i class="fas fa-brain mr-3"></i> IA LAB: VER TODOS OS PROMPTS
             </button>
         </main>
 
-        <!-- DESTAQUES RÁPIDOS -->
         <section class="mt-8 animate-fade-in-up">
             <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-3 text-center italic">Destaques da Trend</p>
             <div class="grid grid-cols-2 gap-3">
                 <div class="prompt-card rounded-xl overflow-hidden p-2">
-                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/300?text=Prompt+1'">
+                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onclick="openImageViewer(this.src)">
                 </div>
                 <div class="prompt-card rounded-xl overflow-hidden p-2">
-                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onerror="this.src='https://via.placeholder.com/300?text=Prompt+2'">
+                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onclick="openImageViewer(this.src)">
                 </div>
             </div>
         </section>
@@ -218,17 +281,15 @@
     <!-- PÁGINA COMPLETA: IA LAB -->
     <div id="ia-view" class="linktree-container w-full max-w-lg mx-auto relative hidden">
         <header class="flex items-center justify-between mb-8">
-            <button onclick="toggleView('home-view')" class="text-gray-400 hover:text-white transition-all">
-                <i class="fas fa-arrow-left text-xl"></i>
-            </button>
+            <button onclick="toggleView('home-view')" class="text-gray-400 hover:text-white transition-all"><i class="fas fa-arrow-left text-xl"></i></button>
             <h2 class="text-2xl font-black text-fuchsia-500 tracking-tighter">IA LAB PROMPTS</h2>
             <div class="w-6"></div> 
         </header>
-
-        <div class="bg-blue-900/20 p-5 rounded-2xl border border-blue-500/20 mb-8">
-            <h3 class="text-sm font-bold text-blue-400 mb-3 flex items-center">
-                <i class="fas fa-info-circle mr-2 text-base"></i> COMO UTILIZAR?
-            </h3>
+    <!-- COMO UTILIZAR -->
+    <div class="bg-blue-900/20 p-5 rounded-2xl border border-blue-500/20 mb-8">
+        <h3 class="text-sm font-bold text-blue-400 mb-3 flex items-center">
+            <i class="fas fa-info-circle mr-2 text-base"></i> COMO UTILIZAR?
+        </h3>
             <ul class="text-[11px] text-gray-300 space-y-3 leading-relaxed">
                 <li>1. Escolha uma das imagens abaixo que você curtiu.</li>
                 <li>2. Clique no botão <span class="text-fuchsia-400 font-bold uppercase">Copiar Prompt</span>.</li>
@@ -236,9 +297,14 @@
                 <li>4. Coloque sua foto e uma foto de referência (personagem).</li>
                 <li>5. Cole o texto e gere sua própria versão!</li>
             </ul>
-        </div>
+    </div>
 
-        <!-- GRID DE 8 CARDS -->
+        <!-- BOTÃO TEMÁTICO ZODIACO -->
+        <button onclick="openZodiacView()" class="link-button zodiac-btn flex items-center justify-center w-full p-4 rounded-2xl mb-8 text-xl shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+            <i class="fas fa-bolt mr-3"></i> PROMPTS: CAVALEIROS DO ZODÍACO
+        </button>
+
+        <!-- GRID DE 6 CARDS -->
         <div class="grid grid-cols-2 gap-4">
             
             <!-- Card 1 -->
@@ -259,29 +325,11 @@
                 </button>
             </div>
 
-            <!-- Card 3 -->
-            <div class="prompt-card rounded-2xl p-3">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+3'">
-                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth</p>
-                <button id="btn-lab-3" onclick="copyPrompt('Create an image of me as Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet, shoulder plates and arm guards. Pose me exactly like the reference image, with the arm raised in front of the body and the torso slightly turned, conveying strength, discipline and calm power. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the chest, jawline and heroic posture. The background must be a deep emerald green mixed with dark shadows and subtle cosmic energy, matching the Dragon theme. Lighting is tightly directional, highlighting the metallic reflections of the armor and casting dramatic shadows to sculpt the muscles and armor plates with precision. The expression should be serious and focused, eyes determined, conveying inner strength and honor. The armor must be highly detailed, realistic, and faithful to the anime’s original colors and textures, with polished emerald metal, sharp edges and glowing highlights. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture. 1No additional props or accessories beyond Shiryu’s Dragon Armor. The visual impact should rely purely on posture, armor design, lighting and color contrast, evoking epic anime heroism and quiet dominance.', 'btn-lab-3')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
-                    <i class="far fa-copy"></i> COPIAR PROMPT
-                </button>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="prompt-card rounded-2xl p-3">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+4'">
-                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco)</p>
-                <button id="btn-lab-4" onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. ⚠️ Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura dourada. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante, peito aberto e ombros firmes, transmitindo heroísmo, coragem, honra e poder sereno. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença divina. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas do ouro da armadura – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um dourado luminoso misturado com tons de amarelo e verde-oliva, com aura cósmica intensa, energia dourada pulsando ao redor do corpo, partículas de luz e névoa suave, evocando o Cosmo de Sagitário, sem roubar foco do personagem. A armadura deve apresentar: – Ouro polido de alto brilho – Texturas realistas de metal nobre – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos quentes e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser séria, confiante e determinada, olhar firme e calmo, transmitindo liderança, justiça, honra e espírito protetor. ❌ Não incluir arco, flecha, armas, personagens extras ou acessórios fora da Armadura de Ouro de Sagitário. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'btn-lab-4')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
-                    <i class="far fa-copy"></i> COPIAR PROMPT
-                </button>
-            </div>
-
             <!-- Card 5 -->
             <div class="prompt-card rounded-2xl p-3">
                 <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/EREN%20AOT.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+5'">
                 <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing the exact uniform of the Survey Corps from the anime Attack on Titan (Shingeki no Kyojin)</p>
-                <button id="btn-lab-5" onclick="copyPrompt('Create an image of me wearing the exact uniform of the Survey Corps from the anime Attack on Titan (Shingeki no Kyojin), including the green hooded cloak with the Wings of Freedom emblem on the back, the brown cropped jacket, beige shirt, white pants with dark leather harness straps, knee-high brown boots, and full 3D maneuver gear at the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing with the body turned slightly away and looking back over the shoulder, one sword held low behind the body, cloak flowing in the wind, conveying vigilance, determination and quiet readiness. The image should feature dramatic cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the silhouette, cape movement and heroic stance. The background should be minimal or softly blurred, with neutral tones or a pale sky, keeping focus on the character and cloak. Lighting must be realistic and directional, creating natural highlights on the leather straps, metallic blades and maneuver gear, and soft shadows on the fabric folds of the cloak and uniform. The expression should be serious and alert, eyes sharp and focused, lips neutral, conveying discipline and inner resolve. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and textures — deep forest green cloak, warm brown leather harness, matte steel blades, and slightly worn military fabric. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to maintain natural skin texture. No additional props beyond the standard Survey Corps equipment. The visual impact should rely purely on posture, cloak movement, lighting and color contrast, evoking military realism, anime heroism and quiet dominance.', 'btn-lab-5')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                <button id="btn-lab-3" onclick="copyPrompt('Create an image of me wearing the exact uniform of the Survey Corps from the anime Attack on Titan (Shingeki no Kyojin), including the green hooded cloak with the Wings of Freedom emblem on the back, the brown cropped jacket, beige shirt, white pants with dark leather harness straps, knee-high brown boots, and full 3D maneuver gear at the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing with the body turned slightly away and looking back over the shoulder, one sword held low behind the body, cloak flowing in the wind, conveying vigilance, determination and quiet readiness. The image should feature dramatic cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the silhouette, cape movement and heroic stance. The background should be minimal or softly blurred, with neutral tones or a pale sky, keeping focus on the character and cloak. Lighting must be realistic and directional, creating natural highlights on the leather straps, metallic blades and maneuver gear, and soft shadows on the fabric folds of the cloak and uniform. The expression should be serious and alert, eyes sharp and focused, lips neutral, conveying discipline and inner resolve. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and textures — deep forest green cloak, warm brown leather harness, matte steel blades, and slightly worn military fabric. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to maintain natural skin texture. No additional props beyond the standard Survey Corps equipment. The visual impact should rely purely on posture, cloak movement, lighting and color contrast, evoking military realism, anime heroism and quiet dominance.', 'btn-lab-3')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
                     <i class="far fa-copy"></i> COPIAR PROMPT
                 </button>
             </div>
@@ -290,7 +338,7 @@
             <div class="prompt-card rounded-2xl p-3">
                 <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/EREN%20AOT%202.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+6'">
                 <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing the exact Survey Corps uniform from the anime Attack on Titan (Shingeki no Kyojin)</p>
-                <button id="btn-lab-6" onclick="copyPrompt('Create an image of me wearing the exact Survey Corps uniform from the anime Attack on Titan (Shingeki no Kyojin), including the brown cropped military jacket, beige shirt, leather chest harness, white pants with dark leather straps, knee-high brown boots, and full 3D maneuver gear attached to the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing in a confident frontal stance with one hand raised near the chest and the other relaxed at the side, conveying determination and leadership. Frame the camera closer to the character, from mid-thigh to head, with a slight zoom-in to emphasize the face, torso and maneuver gear details. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to enhance the heroic presence and facial expression. The background must be a deep emerald green with subtle dark gradients and soft atmospheric light, creating a dramatic contrast with the brown and beige uniform. Lighting must be realistic and directional, highlighting the leather texture of the jacket and straps, the metallic reflections of the maneuver gear, and natural skin tones, while casting soft shadows to sculpt the body and clothing folds. The expression should be fierce and determined, brows slightly furrowed, eyes sharp and focused, mouth slightly open as if mid-command, conveying resolve and inner strength. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and materials — warm brown leather, matte military fabric, worn boots, brushed steel mechanisms. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture and imperfections. No additional props beyond the standard Survey Corps equipment. The visual impact should rely on posture, realistic textures, lighting and emerald green color contrast, evoking military heroism, anime intensity and quiet dominance.', 'btn-lab-6')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                <button id="btn-lab-4" onclick="copyPrompt('Create an image of me wearing the exact Survey Corps uniform from the anime Attack on Titan (Shingeki no Kyojin), including the brown cropped military jacket, beige shirt, leather chest harness, white pants with dark leather straps, knee-high brown boots, and full 3D maneuver gear attached to the waist, faithful to the original design and colors. Pose me exactly like the reference image, standing in a confident frontal stance with one hand raised near the chest and the other relaxed at the side, conveying determination and leadership. Frame the camera closer to the character, from mid-thigh to head, with a slight zoom-in to emphasize the face, torso and maneuver gear details. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to enhance the heroic presence and facial expression. The background must be a deep emerald green with subtle dark gradients and soft atmospheric light, creating a dramatic contrast with the brown and beige uniform. Lighting must be realistic and directional, highlighting the leather texture of the jacket and straps, the metallic reflections of the maneuver gear, and natural skin tones, while casting soft shadows to sculpt the body and clothing folds. The expression should be fierce and determined, brows slightly furrowed, eyes sharp and focused, mouth slightly open as if mid-command, conveying resolve and inner strength. The costume must be highly detailed, realistic, and faithful to the anime’s original colors and materials — warm brown leather, matte military fabric, worn boots, brushed steel mechanisms. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture and imperfections. No additional props beyond the standard Survey Corps equipment. The visual impact should rely on posture, realistic textures, lighting and emerald green color contrast, evoking military heroism, anime intensity and quiet dominance.', 'btn-lab-4')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
                     <i class="far fa-copy"></i> COPIAR PROMPT
                 </button>
             </div>
@@ -299,7 +347,7 @@
             <div class="prompt-card rounded-2xl p-3">
                 <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/KIRITO%20SAO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+7'">
                 <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing Kirito’s iconic outfit from Sword Art Online</p>
-                <button id="btn-lab-7" onclick="copyPrompt('Create an ultra-realistic cinematic image of me wearing Kirito’s iconic outfit from Sword Art Online, redesigned with high-fidelity realism. The long black coat must be made of realistic heavy fabric with visible stitching, layered leather reinforcements, subtle wear marks, seams, folds and natural fabric tension. The silver trims should appear as brushed metal embroidery integrated into the coat. Underneath, include a fitted tactical black combat suit with leather straps, buckles and reinforced armor panels. Equip me with Kirito’s sword in a hyper-detailed realistic style: a polished steel blade with micro-scratches, sharp reflective edges, engraved runes near the guard, and a complex metallic hilt with leather grip wrapping. The second sword (if present) should match the same realistic craftsmanship and weight. Pose me exactly like the reference image, in a low crouched combat stance, one sword raised above the head ready to strike and the other angled forward defensively, body twisted with visible muscle tension, conveying speed, precision and lethal focus. The image must feature dramatic cinematic lighting with intense contrast, captured from a slightly low, upward-facing angle to emphasize anatomy, armor layering and weapon scale. The background should be a dark fantasy interior with deep shadows, cold blue flames and floating glowing embers, creating depth and motion. Lighting should be physically realistic and directional, producing sharp specular highlights on the steel blades, soft reflections on leather and fabric, and natural shadow gradients across the face and body. Add subtle motion blur on sparks and cloth edges to enhance realism. The expression must be intense and determined, brows slightly furrowed, eyes sharp and focused, jaw clenched. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep pores, skin texture and natural imperfections visible. No fantasy exaggerations beyond the original SAO design. The final result should look like a high-budget live-action anime adaptation, ultra-realistic, highly detailed, cinematic, and physically believable.', 'btn-lab-7')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                <button id="btn-lab-5" onclick="copyPrompt('Create an ultra-realistic cinematic image of me wearing Kirito’s iconic outfit from Sword Art Online, redesigned with high-fidelity realism. The long black coat must be made of realistic heavy fabric with visible stitching, layered leather reinforcements, subtle wear marks, seams, folds and natural fabric tension. The silver trims should appear as brushed metal embroidery integrated into the coat. Underneath, include a fitted tactical black combat suit with leather straps, buckles and reinforced armor panels. Equip me with Kirito’s sword in a hyper-detailed realistic style: a polished steel blade with micro-scratches, sharp reflective edges, engraved runes near the guard, and a complex metallic hilt with leather grip wrapping. The second sword (if present) should match the same realistic craftsmanship and weight. Pose me exactly like the reference image, in a low crouched combat stance, one sword raised above the head ready to strike and the other angled forward defensively, body twisted with visible muscle tension, conveying speed, precision and lethal focus. The image must feature dramatic cinematic lighting with intense contrast, captured from a slightly low, upward-facing angle to emphasize anatomy, armor layering and weapon scale. The background should be a dark fantasy interior with deep shadows, cold blue flames and floating glowing embers, creating depth and motion. Lighting should be physically realistic and directional, producing sharp specular highlights on the steel blades, soft reflections on leather and fabric, and natural shadow gradients across the face and body. Add subtle motion blur on sparks and cloth edges to enhance realism. The expression must be intense and determined, brows slightly furrowed, eyes sharp and focused, jaw clenched. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep pores, skin texture and natural imperfections visible. No fantasy exaggerations beyond the original SAO design. The final result should look like a high-budget live-action anime adaptation, ultra-realistic, highly detailed, cinematic, and physically believable.', 'btn-lab-5')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
                     <i class="far fa-copy"></i> COPIAR PROMPT
                 </button>
             </div>
@@ -308,28 +356,68 @@
             <div class="prompt-card rounded-2xl p-3">
                 <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IMPERADOR%20HIROHITO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onerror="this.src='https://via.placeholder.com/300?text=Arte+8'">
                 <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: traje imperial inspirado no Imperador Hirohito do Japão</p>
-                <button id="btn-lab-8" onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim vestindo um traje imperial inspirado no Imperador Hirohito do Japão, incorporando fielmente o design visual do personagem de Mobile Legends mostrado na referência, mantendo o estilo nobre, militar e cerimonial. ⚠️ Fidelidade facial absoluta: Preservar exatamente meu rosto da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, mandíbula, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não estilizar, não suavizar. Integração perfeita do rosto humano real com o traje imperial. Retoques mínimos, mantendo poros e microtexturas realistas. O traje deve incluir: – Uniforme preto imperial de corte militar elegante – Faixa diagonal vermelha intensa atravessando o peito – Capa longa vermelha profunda presa ao ombro – Correntes metálicas prateadas realistas no peito e cintura – Broches, medalhas e ornamentos metálicos finamente detalhados – Luvas pretas e botas militares altas de couro polido Tudo com tecidos realistas, costuras visíveis, caimento pesado, aparência nobre e funcional, sem aparência de cosplay. Pose: Reproduzir a pose icônica imperial da referência, postura ereta e dominante, tronco levemente inclinado para frente, um braço posicionado com autoridade, transmitindo poder absoluto, liderança, frieza e presença imperial. Câmera: Ângulo levemente baixo (low angle), apontada para cima, reforçando imponência, mandíbula, ombros e presença de imperador. Iluminação: Iluminação cinematográfica extrema, alto contraste, estilo chiaroscuro: – Luz principal forte lateral destacando rosto e torso – Sombras profundas criando drama e autoridade – Reflexos realistas nos metais, correntes e botões – Destaque no vermelho da capa e faixa Fundo: Fundo neutro escuro ou interior palaciano minimalista desfocado, sem distrações, mantendo foco total no personagem. Expressão: Séria, fria e dominante. Olhar firme e penetrante, lábios neutros, expressão de comando absoluto e autocontrole. Estilo visual: Ultrarrealismo cinematográfico, nível Hollywood VFX, qualidade de filme AAA, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e nos detalhes do traje. ❌ Não adicionar personagens extras, armas modernas, armas de fogo ou acessórios fora do traje imperial.', 'btn-lab-8')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
+                <button id="btn-lab-6" onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim vestindo um traje imperial inspirado no Imperador Hirohito do Japão, incorporando fielmente o design visual do personagem de Mobile Legends mostrado na referência, mantendo o estilo nobre, militar e cerimonial. ⚠️ Fidelidade facial absoluta: Preservar exatamente meu rosto da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, mandíbula, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não estilizar, não suavizar. Integração perfeita do rosto humano real com o traje imperial. Retoques mínimos, mantendo poros e microtexturas realistas. O traje deve incluir: – Uniforme preto imperial de corte militar elegante – Faixa diagonal vermelha intensa atravessando o peito – Capa longa vermelha profunda presa ao ombro – Correntes metálicas prateadas realistas no peito e cintura – Broches, medalhas e ornamentos metálicos finamente detalhados – Luvas pretas e botas militares altas de couro polido Tudo com tecidos realistas, costuras visíveis, caimento pesado, aparência nobre e funcional, sem aparência de cosplay. Pose: Reproduzir a pose icônica imperial da referência, postura ereta e dominante, tronco levemente inclinado para frente, um braço posicionado com autoridade, transmitindo poder absoluto, liderança, frieza e presença imperial. Câmera: Ângulo levemente baixo (low angle), apontada para cima, reforçando imponência, mandíbula, ombros e presença de imperador. Iluminação: Iluminação cinematográfica extrema, alto contraste, estilo chiaroscuro: – Luz principal forte lateral destacando rosto e torso – Sombras profundas criando drama e autoridade – Reflexos realistas nos metais, correntes e botões – Destaque no vermelho da capa e faixa Fundo: Fundo neutro escuro ou interior palaciano minimalista desfocado, sem distrações, mantendo foco total no personagem. Expressão: Séria, fria e dominante. Olhar firme e penetrante, lábios neutros, expressão de comando absoluto e autocontrole. Estilo visual: Ultrarrealismo cinematográfico, nível Hollywood VFX, qualidade de filme AAA, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e nos detalhes do traje. ❌ Não adicionar personagens extras, armas modernas, armas de fogo ou acessórios fora do traje imperial.', 'btn-lab-6')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
                     <i class="far fa-copy"></i> COPIAR PROMPT
                 </button>
             </div>
 
         </div>
 
-        <footer class="mt-12 text-center pb-8 border-t border-white/5 pt-10">
-            <div class="mb-8 px-4">
-                <p class="text-sm font-bold text-white mb-1">Deseja um personagem específico?</p>
-                <p class="text-xs text-gray-400">Entre em contato pela DM, assim conversamos para saber qual você deseja!</p>
+        <button onclick="toggleView('home-view')" class="mt-12 block mx-auto text-[10px] uppercase tracking-widest text-gray-500 hover:text-white underline decoration-fuchsia-500 underline-offset-4">Voltar ao Início</button>
+    </div>
+
+    <!-- PÁGINA EXCLUSIVA: CAVALEIROS DO ZODIACO -->
+    <div id="zodiac-view" class="linktree-container w-full max-w-lg mx-auto relative hidden border-yellow-500/50">
+        <header class="flex items-center justify-between mb-8">
+            <button onclick="toggleView('ia-view')" class="text-yellow-500 hover:text-white transition-all"><i class="fas fa-arrow-left text-xl"></i></button>
+            <h2 class="text-2xl font-black text-yellow-500 tracking-tighter">SANTUÁRIO DE PROMPTS</h2>
+            <div class="w-6"></div> 
+        </header>
+
+        <div class="grid grid-cols-2 gap-4">
+            <!-- Card 1 (Seiya Sagitário) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Seiya de Sagitário Ouro</p>
+                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura dourada. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante, peito aberto e ombros firmes, transmitindo heroísmo, coragem, honra e poder sereno. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença divina. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas do ouro da armadura – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um dourado luminoso misturado com tons de amarelo e verde-oliva, com aura cósmica intensa, energia dourada pulsando ao redor do corpo, partículas de luz e névoa suave, evocando o Cosmo de Sagitário, sem roubar foco do personagem. A armadura deve apresentar: – Ouro polido de alto brilho – Texturas realistas de metal nobre – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos quentes e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser séria, confiante e determinada, olhar firme e calmo, transmitindo liderança, justiça, honra e espírito protetor. ❌ Não incluir arco, flecha, armas, personagens extras ou acessórios fora da Armadura de Ouro de Sagitário. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-1')" id="z-btn-1" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
             </div>
-            <div class="flex justify-center gap-10 mb-10">
-                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="text-white hover:text-fuchsia-400 transform hover:scale-125 transition-all"><i class="fab fa-tiktok text-3xl"></i></a>
-                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="text-white hover:text-blue-400 transform hover:scale-125 transition-all"><i class="fab fa-instagram text-3xl"></i></a>
+            <!-- Card 2 (Seiya de Pegasus) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEYIA%20DE%20PEGASUS.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Seiya de Pegasus</p>
+                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Pégasus, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Pégasus completa, 100% fiel ao design original do anime clássico, com armadura branca prateada e detalhes em vermelho intenso, capacete de Pégasus com chifres curvos dourados, peitoral estilizado, ombreiras aerodinâmicas e manoplas robustas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura de Pégasus. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com o braço elevado à frente do corpo em posição de ataque, punho fechado, o outro braço recuado, e o tronco levemente girado, transmitindo impulso, coragem, honra e poder explosivo. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura branca prateada – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um azul cósmico profundo misturado com tons de turquesa e branco luminoso, com explosões de energia, partículas estelares, trilhas de luz e névoa leve, evocando o Cosmo de Pégasus, sem roubar foco do personagem. A armadura deve apresentar: – Metal branco-prateado polido de alto brilho – Texturas realistas de metal – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos frios e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser intensa, determinada e corajosa, olhar firme e ardente, maxilar tensionado, transmitindo espírito de luta, esperança e perseverança. ❌ Não incluir armas, cenários extras, personagens adicionais ou acessórios fora da Armadura de Bronze de Pégasus. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-2')" id="z-btn-2" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
             </div>
-            <button onclick="toggleView('home-view')" class="text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors underline decoration-fuchsia-500 underline-offset-4">Voltar ao Início</button>
-        </footer>
+            <!-- Card 3 (Shiryu de Dragão) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Shiryu de Dragão</p>
+                <button onclick="copyPrompt('Create an image of me as Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet, shoulder plates and arm guards. Pose me exactly like the reference image, with the arm raised in front of the body and the torso slightly turned, conveying strength, discipline and calm power. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the chest, jawline and heroic posture. The background must be a deep emerald green mixed with dark shadows and subtle cosmic energy, matching the Dragon theme. Lighting is tightly directional, highlighting the metallic reflections of the armor and casting dramatic shadows to sculpt the muscles and armor plates with precision. The expression should be serious and focused, eyes determined, conveying inner strength and honor. The armor must be highly detailed, realistic, and faithful to the anime’s original colors and textures, with polished emerald metal, sharp edges and glowing highlights. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture. No additional props or accessories beyond Shiryu’s Dragon Armor. The visual impact should rely purely on posture, armor design, lighting and color contrast, evoking epic anime heroism and quiet dominance.', 'z-btn-3')" id="z-btn-3" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
+            </div>
+            <!-- Card 4 (Hyoga de Cisne) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/HYOGA%20DE%20CISNE.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Hyoga de Cisne</p>
+                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Hyoga de Cisne, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Cisne completa, 100% fiel ao design original do anime clássico, com armadura em tons azul-gelo, prata e branco, capacete de Cisne com asas laterais características, peitoral elegante, ombreiras afiadas e manoplas refinadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura de Cisne. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com o braço elevado à frente do corpo apontando para o inimigo, mão semiaberta ou punho tensionado, e o tronco levemente girado, transmitindo frieza, elegância, disciplina e poder controlado. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura azul-prateada – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um azul glacial profundo misturado com branco luminoso, com cristais de gelo flutuando, névoa fria, partículas congeladas e trilhas de energia azul-clara, evocando o Cosmo de Cisne, sem roubar foco do personagem. A armadura deve apresentar: – Metal azul-gelo polido de alto brilho – Texturas realistas de metal frio – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos frios e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser fria, séria e determinada, olhar penetrante e calmo, maxilar firme, transmitindo autocontrole, honra e força interior. ❌ Não incluir armas, cenários extras, personagens adicionais ou acessórios fora da Armadura de Bronze de Cisne. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-4')" id="z-btn-4" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
+            </div> 
+            <!-- Card 5 (Shun de Andromeda) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHUN%20DE%20ANDROMEDA.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Shun de Andromeda</p>
+                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Shun de Andrômeda, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Andrômeda completa, 100% fiel ao design original do anime clássico, com armadura em tons rosa-magenta, branco e detalhes verde-esmeralda, capacete com chifres longos característicos, peitoral elegante, ombreiras arredondadas e manoplas refinadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a Armadura de Andrômeda. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com um braço estendido à frente com a mão aberta em gesto defensivo e o outro braço puxando a corrente de Andrômeda, com várias seções da corrente cruzando o primeiro plano da imagem, criando profundidade e movimento dinâmico. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura rosa-magenta – Bordas suaves e encaixes elegantes das placas – Brilho sutil nas correntes cromadas de Andrômeda – Sombras dramáticas esculpindo músculos, rosto e armadura com precisão O fundo deve ser um rosa profundo misturado com tons verde-esmeralda e violeta, com energia cósmica sutil, partículas etéreas e névoa leve, evocando o Cosmo de Andrômeda, sem roubar foco do personagem. A armadura deve apresentar: – Metal rosa polido de alto brilho – Detalhes verde-esmeralda nos joelhos e peitoral – Texturas realistas de metal e tecido – Micro-arranhões sutis e desgaste mínimo de batalha – Design fiel ao anime clássico, sem releituras modernas As correntes de Andrômeda devem ser altamente detalhadas, metálicas, com elos realistas, algumas em primeiro plano desfocadas levemente para criar profundidade de campo, transmitindo velocidade, controle e fluidez. A expressão deve ser séria, concentrada e determinada, com leve tensão emocional no olhar, transmitindo proteção, coragem e força interior. ❌ Não incluir armas extras, cenários adicionais, personagens secundários ou acessórios fora da Armadura de Bronze de Andrômeda e suas correntes. O impacto visual deve depender exclusivamente de postura, correntes, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto, no torso e nas correntes em primeiro plano.', 'z-btn-5')" id="z-btn-5" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
+            </div>
+            <!-- Card 6 (Ikki de Fenix) -->
+            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
+                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IKKI%20DE%20FENIX.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
+                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Ikki de Fenix</p>
+                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Ikki de Fênix, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze da Fênix completa, 100% fiel ao design original do anime clássico, com armadura em tons azul-profundo metálico com detalhes laranja-dourados no elmo, capacete com os dois chifres longos característicos da Fênix, peitoral robusto em formato de ave, ombreiras largas e manoplas angulares. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a Armadura da Fênix. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, em postura firme e imponente, corpo ereto, braços relaxados ao lado do corpo com punhos cerrados, tronco levemente projetado para frente, transmitindo domínio absoluto, resistência, orgulho e poder contido. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura intimidadora e destacando peitoral, ombros, mandíbula e presença dominante. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura azul – Brilho dourado nos chifres e detalhes do elmo – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas esculpindo músculos, rosto e armadura com precisão. O fundo deve ser um azul-escuro profundo com tons vermelho-incandescente e laranja, com energia cósmica sutil em forma de partículas flamejantes e névoa quente, evocando o Cosmo da Fênix, sem roubar foco do personagem. A armadura deve apresentar: – Metal azul polido de alto brilho – Detalhes laranja-dourados intensos no elmo e no cinto – Texturas realistas de metal e couro – Micro-arranhões sutis e desgaste mínimo de batalha – Design fiel ao anime clássico, sem releituras modernas. A expressão deve ser séria, fria e intimidadora, olhar penetrante e determinado, transmitindo solidão, força inabalável, orgulho e espírito indestrutível. ❌ Não incluir armas, asas extras, fogo literal, cenários adicionais, personagens secundários ou acessórios fora da Armadura de Bronze da Fênix. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-6')" id="z-btn-6" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
+            </div>
+            <!-- Outros cards omitidos ... -->
+        </div>
+        <p class="text-center mt-8 text-xs text-yellow-600 italic">"Faça elevar o Cosmo no seu coração!"</p>
     </div>
 
     <script>
-        // --- WEBGL BACKGROUND LOGIC ---
+        // --- WEBGL BACKGROUND ---
         let scene, camera, renderer, particles;
         let mouseX = 0, mouseY = 0;
 
@@ -337,81 +425,104 @@
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.z = 5;
-
             renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-bg'), antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
 
-            // Criar campo de partículas
             const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 3000;
+            const particlesCount = 2000;
             const posArray = new Float32Array(particlesCount * 3);
-
-            for (let i = 0; i < particlesCount * 3; i++) {
-                posArray[i] = (Math.random() - 0.5) * 15;
-            }
-
+            for (let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 15;
             particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
 
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.015,
-                color: '#d510f3',
-                transparent: true,
-                opacity: 0.8,
-                blending: THREE.AdditiveBlending
-            });
-
+            const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: '#d510f3', transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
             particles = new THREE.Points(particlesGeometry, particlesMaterial);
             scene.add(particles);
 
-            // Adicionar uma segunda camada de partículas azuis para contraste
-            const particles2 = new THREE.Points(
-                particlesGeometry.clone(),
-                new THREE.PointsMaterial({ size: 0.01, color: '#3b82f6', transparent: true, opacity: 0.5 })
-            );
+            const particles2 = new THREE.Points(particlesGeometry.clone(), new THREE.PointsMaterial({ size: 0.015, color: '#3b82f6', transparent: true, opacity: 0.4 }));
             particles2.rotation.y = Math.PI;
             scene.add(particles2);
 
-            document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX - window.innerWidth / 2) / 100;
-                mouseY = (e.clientY - window.innerHeight / 2) / 100;
+            document.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) / 100; mouseY = (e.clientY - window.innerHeight / 2) / 100; });
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
             });
-
-            window.addEventListener('resize', onWindowResize);
             animate();
-        }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
         function animate() {
             requestAnimationFrame(animate);
-            particles.rotation.y += 0.001;
-            particles.rotation.x += 0.0005;
-
-            // Suave efeito de parallax baseado no mouse
+            particles.rotation.y += 0.0015;
             scene.rotation.y += (mouseX - scene.rotation.y) * 0.05;
             scene.rotation.x += (mouseY - scene.rotation.x) * 0.05;
-
             renderer.render(scene, camera);
         }
 
-        // --- UI LOGIC ---
+        // --- IMAGE VIEWER LOGIC ---
+        function openImageViewer(src) {
+            const modal = document.getElementById('image-viewer-modal');
+            const img = document.getElementById('full-res-image');
+            img.src = src;
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Trava o scroll
+        }
+
+        function closeImageViewer() {
+            const modal = document.getElementById('image-viewer-modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Destrava o scroll
+        }
+
+        // --- NAVIGATION & LOCK ---
+        let steps = { 1: false, 2: false };
+        let isUnlocked = false; 
+
         function toggleView(viewId) {
-            const home = document.getElementById('home-view');
-            const ia = document.getElementById('ia-view');
-            
-            if (viewId === 'ia-view') {
-                home.classList.add('hidden');
-                ia.classList.remove('hidden');
-            } else {
-                ia.classList.add('hidden');
-                home.classList.remove('hidden');
-            }
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('ia-view').classList.add('hidden');
+            document.getElementById('zodiac-view').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openIAView() {
+            if (isUnlocked) {
+                toggleView('ia-view');
+            } else {
+                document.getElementById('social-lock').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function openZodiacView() {
+            toggleView('zodiac-view');
+        }
+
+        function markStep(step) {
+            steps[step] = true;
+            document.getElementById(`check-${step}`).className = "fas fa-check-circle text-green-400";
+            
+            if (steps[1] && steps[2]) {
+                const btn = document.getElementById('unlock-btn');
+                btn.classList.remove('bg-gray-800', 'text-gray-500', 'cursor-not-allowed', 'opacity-50');
+                btn.classList.add('bg-fuchsia-600', 'text-white', 'hover:scale-105');
+            }
+        }
+
+        function checkUnlock() {
+            if (steps[1] && steps[2]) {
+                isUnlocked = true;
+                document.getElementById('social-lock').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                toggleView('ia-view');
+            }
+        }
+
+        function closeLock() {
+            document.getElementById('social-lock').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         function copyPrompt(text, btnId) {
@@ -419,21 +530,13 @@
             textArea.value = text;
             document.body.appendChild(textArea);
             textArea.select();
-            
-            try {
-                if (document.execCommand('copy')) {
-                    showToast();
-                    const btn = document.getElementById(btnId);
-                    const originalContent = btn.innerHTML;
-                    btn.innerHTML = '<i class="fas fa-check"></i> COPIADO!';
-                    btn.classList.replace('bg-gray-700', 'bg-green-600');
-                    setTimeout(() => {
-                        btn.innerHTML = originalContent;
-                        btn.classList.replace('bg-green-600', 'bg-gray-700');
-                    }, 2000);
-                }
-            } catch (err) { console.error('Erro ao copiar', err); }
+            document.execCommand('copy');
             document.body.removeChild(textArea);
+            showToast();
+            const btn = document.getElementById(btnId);
+            const old = btn.innerText;
+            btn.innerText = "COPIADO!";
+            setTimeout(() => btn.innerText = old, 2000);
         }
 
         function showToast() {
@@ -442,15 +545,7 @@
             setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
         }
 
-        window.onload = () => {
-            initWebGL();
-            document.querySelectorAll('.animate-fade-in-up').forEach(el => {
-                el.addEventListener('animationend', () => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                });
-            });
-        };
+        window.onload = initWebGL;
     </script>
 
 </body>
