@@ -1,434 +1,461 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ Marcelio Venancio | IA • Arte • Anime ⚡</title>
-    <meta name="description" content="Acesse todas as minhas redes sociais, projetos e conteúdos de forma impactante e única.">
-    
-    <!-- Scripts e Fontes -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <!-- Three.js para WebGL -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcelio Venancio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@700;800&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07050f;
+  --surface:rgba(255,255,255,.04);
+  --border:rgba(255,255,255,.08);
+  --p:#c026d3;
+  --b:#3b82f6;
+  --g:#a855f7;
+  --w:#f0e8ff;
+  --dim:rgba(240,232,255,.35);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--w);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
+canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-    <style>
-        :root {
-            --primary-purple: #d510f3;
-            --primary-blue: #3b82f6;
-            --spotify-green: #1DB954;
-            --gold: #ffd700;
-            --card-bg: rgba(13, 17, 23, 0.6); 
-            --text-light: #e2e8f0;
-        }
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:150px}
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #05070a; 
-            color: var(--text-light);
-            min-height: 100vh;
-            margin: 0;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem 0.5rem;
-        }
+/* WRAPPER */
+.wrap{position:relative;z-index:10;max-width:440px;margin:0 auto;padding:20px 16px 60px}
 
-        #webgl-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
+/* BANNER */
+#banner-section{margin-bottom:20px;border-radius:14px;overflow:hidden;position:relative;min-height:80px;display:none}
+.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:center;border-radius:14px;overflow:hidden}
+.banner-slide.active{opacity:1;position:relative}
+.banner-slide img{width:100%;height:100%;object-fit:cover;border-radius:14px}
+.banner-slide .b-text{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;background:linear-gradient(transparent,rgba(7,5,15,.85))}
+.banner-slide .b-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--w);line-height:1.2}
+.banner-slide .b-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-top:4px}
+.banner-slide a.b-cta{display:inline-block;margin-top:8px;padding:5px 14px;background:var(--p);color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;text-decoration:none}
+.banner-dots{position:absolute;bottom:10px;right:12px;display:flex;gap:5px;z-index:2}
+.banner-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .3s}
+.banner-dots span.on{background:var(--p)}
 
-        .linktree-container {
-            position: relative;
-            z-index: 10;
-            padding: 2rem; 
-            border-radius: 1.5rem;
-            background-color: var(--card-bg); 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8); 
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+/* PROFILE */
+.profile{text-align:center;padding:28px 0 20px}
+.avatar-wrap{position:relative;display:inline-block;margin-bottom:14px}
+.avatar-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--p),var(--b),var(--g),var(--p));animation:spin 4s linear infinite;z-index:0}
+.avatar-ring::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--bg)}
+.avatar-wrap img{position:relative;z-index:1;width:96px;height:96px;border-radius:50%;object-fit:cover;display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.p-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--w),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.p-bio{font-size:12px;color:var(--dim);line-height:1.6;max-width:280px;margin:0 auto}
 
-        .linktree-container::before {
-            content: '';
-            position: absolute;
-            top: -2px; right: -2px; bottom: -2px; left: -2px; 
-            background: linear-gradient(45deg, var(--primary-purple), var(--primary-blue), #d946ef);
-            background-size: 300% 300%;
-            border-radius: 1.6rem; 
-            z-index: -1;
-            animation: pulseBorder 5s ease infinite alternate, gradientBorder 10s ease infinite;
-            opacity: 0.4;
-        }
+/* MUSIC PLAYER */
+#music-section{margin-bottom:16px;display:none}
+.music-card{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;text-decoration:none;transition:all .3s}
+.music-card:hover{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.4);transform:translateY(-2px)}
+.music-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;background:rgba(168,85,247,.2)}
+.music-info{flex:1;min-width:0}
+.music-title{font-size:13px;font-weight:700;color:var(--w);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music-artist{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+.music-plat{font-family:'DM Mono',monospace;font-size:9px;color:rgba(168,85,247,.7);margin-top:4px}
+.music-icon{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.music-icon svg{width:20px;height:20px;fill:rgba(168,85,247,.6)}
+.bars{display:flex;gap:2px;align-items:flex-end;height:18px}
+.bars span{width:3px;background:var(--g);border-radius:2px;animation:bar .8s ease-in-out infinite alternate}
+.bars span:nth-child(2){animation-delay:.15s;height:10px}
+.bars span:nth-child(3){animation-delay:.3s;height:14px}
+.bars span:nth-child(1){height:7px}
+.bars span:nth-child(4){animation-delay:.45s;height:9px}
+@keyframes bar{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
 
-        @keyframes gradientBorder {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+/* LINKS */
+.links-section{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.lbtn{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;border:1px solid transparent}
+.lbtn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.lbtn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
+.lbtn .icon{width:20px;text-align:center;flex-shrink:0;font-size:16px}
+.lbtn .arr{margin-left:auto;opacity:.4;font-size:12px;transition:transform .2s,opacity .2s}
+.lbtn:hover .arr{opacity:.8;transform:translateX(3px)}
 
-        @keyframes pulseBorder { 0% { opacity: 0.2; } 100% { opacity: 0.5; } }
+.l-portfolio{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(99,102,241,.15));border-color:rgba(99,102,241,.3);color:var(--w)}
+.l-portfolio:hover{border-color:rgba(99,102,241,.6);background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(99,102,241,.25))}
+.l-ig{background:var(--surface);border-color:var(--border)}
+.l-ig:hover{border-color:rgba(214,60,163,.4);background:rgba(214,60,163,.06)}
+.l-tt{background:var(--surface);border-color:var(--border)}
+.l-tt:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
+.l-dc{background:var(--surface);border-color:var(--border)}
+.l-dc:hover{border-color:rgba(88,101,242,.4);background:rgba(88,101,242,.06)}
+.l-yt{background:var(--surface);border-color:var(--border)}
+.l-yt:hover{border-color:rgba(255,0,0,.3);background:rgba(255,0,0,.04)}
+.l-sp{background:var(--surface);border-color:var(--border)}
+.l-sp:hover{border-color:rgba(29,185,84,.4);background:rgba(29,185,84,.05)}
 
-        .animate-fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
+/* IA LAB BTN */
+.ia-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--g));color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;letter-spacing:.03em;text-decoration:none;transition:all .3s;box-shadow:0 4px 24px rgba(192,38,211,.25);border:none;width:100%;cursor:pointer}
+.ia-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(192,38,211,.4)}
 
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+/* HIGHLIGHTS */
+#highlights-section{margin-bottom:20px;display:none}
+.hl-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.hl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.hl-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:var(--surface);cursor:pointer}
+.hl-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.hl-item:hover img{transform:scale(1.06)}
+.hl-item .hl-over{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(7,5,15,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:10px;opacity:0;transition:opacity .3s}
+.hl-item:hover .hl-over{opacity:1}
+.hl-item .hl-title{font-size:11px;font-weight:700;color:var(--w);line-height:1.3}
+.hl-item .hl-tag{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-top:2px}
 
-        .profile-pic {
-            transition: all 0.5s ease;
-            box-shadow: 0 0 0 4px rgba(255,255,255,0.05);
-            cursor: pointer;
-        }
-        
-        .profile-pic:hover {
-            transform: rotate(3deg) scale(1.05);
-            box-shadow: 0 0 0 4px var(--primary-purple), 0 0 30px rgba(213, 16, 243, 0.4);
-        }
+/* IA LAB PAGE */
+#ia-view,#zodiac-view{display:none;min-height:100vh}
+.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);background:none;border:none;cursor:pointer;transition:color .2s;margin-bottom:24px;padding:0}
+.back-btn:hover{color:var(--w)}
+.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:20px}
+.page-title span{background:linear-gradient(135deg,var(--p),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
-        .link-button {
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .link-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(213, 16, 243, 0.3);
-        }
-        
-        .main-link { background: linear-gradient(45deg, var(--primary-blue), #6366f1); }
-        .ia-btn { background: linear-gradient(45deg, #a855f7, #d946ef); }
+/* PROMPT CARDS */
+.how-to{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px}
+.how-to h3{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(147,197,253,.7);margin-bottom:10px}
+.how-to ol{list-style:none;display:flex;flex-direction:column;gap:6px}
+.how-to li{font-size:11px;color:rgba(240,232,255,.5);line-height:1.6;counter-increment:steps;display:flex;gap:8px}
+.how-to li::before{content:counter(steps);font-family:'DM Mono',monospace;font-size:9px;color:var(--b);flex-shrink:0;margin-top:2px}
+.how-to{counter-reset:steps}
 
-        .zodiac-btn {
-            background: linear-gradient(45deg, #936639, #ffd700, #b8860b);
-            background-size: 200% 200%;
-            animation: goldFlow 3s linear infinite;
-            color: #000;
-            font-weight: 900;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.5);
-            border: 2px solid #fff;
-        }
+.pcat-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:.02em;border:none;cursor:pointer;transition:all .3s;margin-bottom:20px;text-decoration:none}
+.zodiac-btn{background:linear-gradient(135deg,#92400e,#d97706,#92400e);background-size:200%;animation:goldShift 3s linear infinite;color:#000;box-shadow:0 4px 20px rgba(217,119,6,.3)}
+@keyframes goldShift{0%{background-position:0%}100%{background-position:200%}}
+.zodiac-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(217,119,6,.45)}
 
-        @keyframes goldFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;transition:border-color .3s}
+.pcard:hover{border-color:rgba(192,38,211,.3)}
+.pcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px;cursor:pointer}
+.pcard-desc{font-size:9px;color:rgba(240,232,255,.3);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-style:italic}
+.copy-btn{width:100%;padding:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(240,232,255,.5);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
+.copy-btn:hover{background:rgba(192,38,211,.15);border-color:rgba(192,38,211,.4);color:var(--w)}
+.copy-btn.copied{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:rgba(34,197,94,.8)}
 
-        .prompt-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
+/* ZODIAC */
+.zodiac-header{text-align:center;margin-bottom:24px}
+.zodiac-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#d97706}
+.zodiac-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(217,119,6,.5);text-transform:uppercase;margin-top:4px}
+.zcard{background:rgba(146,64,14,.06);border:1px solid rgba(146,64,14,.2);border-radius:12px;padding:10px;transition:border-color .3s}
+.zcard:hover{border-color:rgba(217,119,6,.4)}
+.zcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:8px;cursor:pointer}
+.zcard-name{font-size:10px;font-weight:700;color:#d97706;margin-bottom:6px}
+.zcopy{width:100%;padding:7px;background:rgba(146,64,14,.15);border:1px solid rgba(146,64,14,.3);color:#d97706;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
+.zcopy:hover{background:rgba(217,119,6,.25);border-color:#d97706}
+.zcopy.copied{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:rgba(34,197,94,.8)}
 
-        .prompt-card:hover {
-            border-color: var(--primary-purple);
-            background: rgba(213, 16, 243, 0.1);
-        }
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--p),var(--g));color:#fff;padding:10px 24px;border-radius:50px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;z-index:9999;opacity:0;transition:all .4s;pointer-events:none;white-space:nowrap}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            backdrop-filter: blur(15px);
-        }
+/* IMAGE VIEWER */
+#img-modal{position:fixed;inset:0;background:rgba(7,5,15,.95);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
+#img-modal.open{display:flex}
+#img-modal img{max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain}
+#img-modal-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--dim);font-size:24px;cursor:pointer;transition:color .2s;font-family:'DM Mono',monospace}
+#img-modal-close:hover{color:var(--w)}
 
-        #image-viewer-modal img {
-            max-width: 95%;
-            max-height: 90vh;
-            border-radius: 1rem;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        #toast {
-            visibility: hidden;
-            min-width: 250px;
-            background-color: var(--primary-purple);
-            color: #fff;
-            text-align: center;
-            border-radius: 50px;
-            padding: 14px;
-            position: fixed;
-            z-index: 2001;
-            left: 50%; bottom: 30px;
-            transform: translateX(-50%);
-            font-weight: bold;
-        }
-
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-
-        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 30px; opacity: 1; } }
-        @keyframes fadeout { from { bottom: 30px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-
-        .hidden { display: none; }
-    </style>
+.footer-txt{text-align:center;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:rgba(240,232,255,.15);text-transform:uppercase;margin-top:32px}
+</style>
 </head>
 <body>
+<canvas id="bg"></canvas>
+<div id="toast">Copiado!</div>
+<div id="img-modal" onclick="closeImg()">
+  <button id="img-modal-close" onclick="closeImg()">✕</button>
+  <img id="img-modal-src" src="" alt="" onclick="event.stopPropagation()">
+</div>
 
-    <canvas id="webgl-bg"></canvas>
+<!-- ===== HOME ===== -->
+<div id="home-view" class="wrap">
 
-    <!-- MODAL DE VISUALIZAÇÃO DE IMAGEM -->
-    <div id="image-viewer-modal" class="modal-overlay" onclick="closeImageViewer()">
-        <button class="absolute top-5 right-5 text-white text-3xl hover:text-fuchsia-500 transition-colors">
-            <i class="fas fa-times"></i>
-        </button>
-        <img id="full-res-image" src="" alt="Visualização" onclick="event.stopPropagation()">
+  <!-- BANNER -->
+  <div id="banner-section"></div>
+
+  <!-- PROFILE -->
+  <div class="profile">
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Marcelio" onclick="openImg(this.src)">
     </div>
+    <div class="p-name">Marcelio Venancio</div>
+    <div class="p-bio">Explorando as fronteiras da IA e Criatividade.</div>
+  </div>
 
-    <div id="toast">Copiado para o clipboard! 🚀</div>
+  <!-- MÚSICA -->
+  <div id="music-section"></div>
 
-    <!-- PÁGINA PRINCIPAL (HOME) -->
-    <div id="home-view" class="linktree-container w-full max-w-lg mx-auto relative">
-        <header class="text-center mb-8">
-            <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Perfil" class="profile-pic w-28 h-28 md:w-32 md:h-32 rounded-full mx-auto mb-4 animate-fade-in-up" onclick="openImageViewer(this.src)">
-            <h1 class="text-4xl font-extrabold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-purple-300 animate-fade-in-up">Marcelio Venancio</h1>
-            <p class="text-sm text-gray-400 animate-fade-in-up">Explorando as fronteiras da IA e Criatividade.</p>
-        </header>
-
-        <main class="space-y-4 mb-8">
-            <a href="https://marceliovenancio.vercel.app/" target="_blank" class="link-button main-link flex items-center justify-center w-full p-4 rounded-xl text-lg font-extrabold animate-fade-in-up">
-                <i class="fas fa-rocket mr-3"></i> MEU WEBSITE | PORTFÓLIO
-            </a>
-
-            <div class="grid grid-cols-2 gap-3 animate-fade-in-up">
-                <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/40 border border-gray-700">
-                    <i class="fab fa-instagram mr-2"></i> Instagram
-                </a>
-                <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="link-button flex items-center justify-center p-3 rounded-xl text-sm font-semibold bg-gray-800/40 border border-gray-700">
-                    <i class="fab fa-tiktok mr-2"></i> TikTok
-                </a>
-            </div>
-
-            <a href="https://discord.gg/bzN88hAq" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/40 border border-gray-700 animate-fade-in-up">
-                <i class="fab fa-discord mr-3"></i> Discord (GoguenLounge)
-            </a>
-
-            <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/40 border border-gray-700 animate-fade-in-up">
-                <i class="fab fa-youtube mr-3 text-red-500"></i> YouTube
-            </a>
-
-            <a href="https://open.spotify.com/artist/4ASKzkcV8oXC1lVFByJwYD?si=tt8Noe7nQn26xVoOXtcP8Q" target="_blank" class="link-button flex items-center justify-center w-full p-4 rounded-xl text-lg font-semibold bg-gray-800/40 border border-gray-700 animate-fade-in-up">
-                <i class="fab fa-spotify mr-3 text-[#1DB954]"></i> Spotify
-            </a>
-
-            <button onclick="toggleView('ia-view')" class="link-button ia-btn flex items-center justify-center w-full p-5 rounded-xl text-lg font-black shadow-lg animate-fade-in-up">
-                <i class="fas fa-brain mr-3"></i> IA LAB: VER TODOS OS PROMPTS
-            </button>
-        </main>
-
-        <section class="mt-8 animate-fade-in-up">
-            <p class="text-[10px] uppercase tracking-widest text-gray-500 font-bold mb-3 text-center italic">Destaques da Trend</p>
-            <div class="grid grid-cols-2 gap-3">
-                <div class="prompt-card rounded-xl overflow-hidden p-2">
-                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onclick="openImageViewer(this.src)">
-                </div>
-                <div class="prompt-card rounded-xl overflow-hidden p-2">
-                    <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-lg" onclick="openImageViewer(this.src)">
-                </div>
-            </div>
-        </section>
+  <!-- LINKS -->
+  <div class="links-section">
+    <a href="https://marceliovenancio.vercel.app/" target="_blank" class="lbtn l-portfolio">
+      <span class="icon">🚀</span> Portfólio & Website <span class="arr">→</span>
+    </a>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="lbtn l-ig" style="font-size:13px;padding:12px 14px">
+        <span class="icon">📸</span> Instagram <span class="arr">→</span>
+      </a>
+      <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="lbtn l-tt" style="font-size:13px;padding:12px 14px">
+        <span class="icon">🎵</span> TikTok <span class="arr">→</span>
+      </a>
     </div>
+    <a href="https://discord.gg/bzN88hAq" target="_blank" class="lbtn l-dc">
+      <span class="icon">🎮</span> Discord — GoguenLounge <span class="arr">→</span>
+    </a>
+    <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="lbtn l-yt">
+      <span class="icon">▶️</span> YouTube <span class="arr">→</span>
+    </a>
+    <a href="https://open.spotify.com/artist/4ASKzkcV8oXC1lVFByJwYD" target="_blank" class="lbtn l-sp">
+      <span class="icon">🎧</span> Spotify <span class="arr">→</span>
+    </a>
+    <button class="ia-btn" onclick="goTo('ia-view')">
+      🧠 IA LAB — Ver Prompts
+    </button>
+  </div>
 
-    <!-- PÁGINA COMPLETA: IA LAB -->
-    <div id="ia-view" class="linktree-container w-full max-w-lg mx-auto relative hidden">
-        <header class="flex items-center justify-between mb-8">
-            <button onclick="toggleView('home-view')" class="text-gray-400 hover:text-white transition-all"><i class="fas fa-arrow-left text-xl"></i></button>
-            <h2 class="text-2xl font-black text-fuchsia-500 tracking-tighter">IA LAB PROMPTS</h2>
-            <div class="w-6"></div> 
-        </header>
+  <!-- HIGHLIGHTS -->
+  <div id="highlights-section">
+    <div class="hl-label">Destaques</div>
+    <div class="hl-grid" id="hl-grid"></div>
+  </div>
 
-        <div class="bg-blue-900/20 p-5 rounded-2xl border border-blue-500/20 mb-8">
-            <h3 class="text-sm font-bold text-blue-400 mb-3 flex items-center">
-                <i class="fas fa-info-circle mr-2 text-base"></i> COMO UTILIZAR?
-            </h3>
-            <ul class="text-[11px] text-gray-300 space-y-3 leading-relaxed">
-                <li>1. Escolha uma das imagens abaixo que você curtiu.</li>
-                <li>2. Clique no botão <span class="text-fuchsia-400 font-bold uppercase">Copiar Prompt</span>.</li>
-                <li>3. Abra sua ferramenta de IA (ChatGPT, Midjourney, etc).</li>
-                <li>4. Utilize sua foto e o prompt copiado para gerar sua versão!</li>
-            </ul>
+  <div class="footer-txt">© Marcelio Venancio</div>
+</div>
+
+<!-- ===== IA LAB ===== -->
+<div id="ia-view" class="wrap">
+  <button class="back-btn" onclick="goTo('home-view')">← Voltar</button>
+  <div class="page-title">IA LAB <span>Prompts</span></div>
+
+  <div class="how-to">
+    <h3>Como usar</h3>
+    <ol>
+      <li>Escolha uma imagem que curtiu</li>
+      <li>Clique em Copiar Prompt</li>
+      <li>Abra ChatGPT, Midjourney ou similar</li>
+      <li>Use sua foto + o prompt para gerar sua versão</li>
+    </ol>
+  </div>
+
+  <button class="pcat-btn zodiac-btn" onclick="goTo('zodiac-view')">
+    ⚡ Cavaleiros do Zodíaco — Prompts
+  </button>
+
+  <div class="prompt-grid" id="prompts-grid">
+    <!-- cards dinâmicos + estáticos -->
+    <div class="pcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="pcard-desc">Traje de Qin Shi Huang — Record of Ragnarok</div>
+      <button class="copy-btn" onclick="cp('Crie uma imagem minha usando o traje de Qin Shi Huang do anime Record of Ragnarok, com armadura imperial chinesa detalhada, dragões dourados na armadura, fundo dramático com cores imperiais vermelhas e douradas, iluminação cinematográfica, realismo extremo, 8K.',this)">
+        <span>⧉</span> Copiar Prompt
+      </button>
+    </div>
+    <div class="pcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="pcard-desc">Columbina — Genshin Impact</div>
+      <button class="copy-btn" onclick="cp('Create an image of me wearing Columbina\'s costume from Genshin Impact, with the Harbinger\'s red and black outfit, pale skin, eerie smile, dramatic lighting, hyperrealistic, 8K render.',this)">
+        <span>⧉</span> Copiar Prompt
+      </button>
+    </div>
+  </div>
+
+  <div class="footer-txt" style="margin-top:24px">© Marcelio Venancio</div>
+</div>
+
+<!-- ===== ZODÍACO ===== -->
+<div id="zodiac-view" class="wrap">
+  <button class="back-btn" onclick="goTo('ia-view')" style="color:rgba(217,119,6,.6)">← Voltar</button>
+  <div class="zodiac-header">
+    <div class="zodiac-title">⚡ Santuário de Prompts</div>
+    <div class="zodiac-sub">Cavaleiros do Zodíaco</div>
+  </div>
+  <div class="prompt-grid" id="zodiac-grid">
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Seiya — Sagitário Ouro</div>
+      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante. Câmera em ângulo low angle apontada para cima. Iluminação cinematográfica intensa com alto contraste, fundo dourado luminoso com aura cósmica intensa.',this)">⚡ Copiar</button>
+    </div>
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEYIA%20DE%20PEGASUS.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Seiya — Pégasus</div>
+      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Pégasus, do anime Saint Seiya, vestindo a Armadura de Bronze de Pégasus completa, armadura branco-prateada com detalhes vermelhos, capacete com chifres curvos dourados. Fidelidade facial absoluta à referência. Pose com braço elevado em posição de ataque, tronco levemente girado. Câmera low angle. Iluminação cinematográfica, fundo azul cósmico com explosões de energia e partículas estelares.',this)">⚡ Copiar</button>
+    </div>
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Shiryu — Dragão</div>
+      <button class="zcopy" onclick="cp('Create an image of me as Shiryu of the Dragon from Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet. Pose exactly like the reference image, arm raised, torso slightly turned. Intense cinematic lighting from a low angle. Background deep emerald green with cosmic energy. Preserve my exact facial structure from the reference photo. Hyperrealistic, 8K.',this)">⚡ Copiar</button>
+    </div>
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/HYOGA%20DE%20CISNE.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Hyoga — Cisne</div>
+      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Hyoga de Cisne, do anime Saint Seiya, vestindo a Armadura de Bronze de Cisne completa, tons azul-gelo, prata e branco, capacete com asas laterais. Fidelidade facial absoluta. Pose com braço estendido apontando, tronco levemente girado. Câmera low angle. Iluminação cinematográfica. Fundo azul glacial com cristais de gelo, névoa fria e energia azul-clara.',this)">⚡ Copiar</button>
+    </div>
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHUN%20DE%20ANDROMEDA.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Shun — Andrômeda</div>
+      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Shun de Andrômeda do anime Saint Seiya, vestindo a Armadura de Bronze de Andrômeda, tons rosa-magenta com detalhes verde-esmeralda, capacete com chifres longos. Fidelidade facial absoluta. Pose com braço estendido em gesto defensivo e outro braço puxando a corrente de Andrômeda. Câmera low angle. Fundo rosa profundo com tons violeta e partículas etéreas.',this)">⚡ Copiar</button>
+    </div>
+    <div class="zcard">
+      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IKKI%20DE%20FENIX.png?raw=true" alt="" onclick="openImg(this.src)">
+      <div class="zcard-name">Ikki — Fênix</div>
+      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Ikki de Fênix do anime Saint Seiya, vestindo a Armadura de Bronze da Fênix, azul-profundo metálico com detalhes laranja-dourados no elmo, chifres longos. Fidelidade facial absoluta. Pose firme e imponente, corpo ereto, punhos cerrados. Câmera low angle. Fundo azul-escuro com tons vermelho-incandescente e partículas flamejantes.',this)">⚡ Copiar</button>
+    </div>
+  </div>
+  <p style="text-align:center;margin-top:20px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(217,119,6,.35);letter-spacing:.1em">"Faça elevar o Cosmo no seu coração!"</p>
+  <div class="footer-txt">© Marcelio Venancio</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const OWNER='goguenblouts', REPO='MeusLinks', RAW=`https://raw.githubusercontent.com/${OWNER}/${REPO}/main`;
+
+/* BG THREE.JS */
+(function(){
+  const canvas=document.getElementById('bg');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const W=()=>innerWidth,H=()=>innerHeight;
+  renderer.setSize(W(),H());
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(75,W()/H(),.1,100);
+  camera.position.z=5;
+  const geo=new THREE.BufferGeometry();
+  const n=1800,pos=new Float32Array(n*3);
+  for(let i=0;i<n*3;i++)pos[i]=(Math.random()-.5)*16;
+  geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  const p1=new THREE.Points(geo,new THREE.PointsMaterial({color:0xd510f3,size:.022,transparent:true,opacity:.65,blending:THREE.AdditiveBlending}));
+  const p2=new THREE.Points(geo.clone(),new THREE.PointsMaterial({color:0x3b82f6,size:.015,transparent:true,opacity:.4,blending:THREE.AdditiveBlending}));
+  p2.rotation.y=Math.PI;
+  scene.add(p1,p2);
+  let mx=0,my=0;
+  document.addEventListener('mousemove',e=>{mx=(e.clientX/W()-.5)*2;my=(e.clientY/H()-.5)*2;});
+  window.addEventListener('resize',()=>{renderer.setSize(W(),H());camera.aspect=W()/H();camera.updateProjectionMatrix();});
+  (function a(){requestAnimationFrame(a);p1.rotation.y+=.001;scene.rotation.y+=(mx*.08-scene.rotation.y)*.05;scene.rotation.x+=(my*.06-scene.rotation.x)*.05;renderer.render(scene,camera);})();
+})();
+
+/* NAV */
+function goTo(id){
+  ['home-view','ia-view','zodiac-view'].forEach(v=>document.getElementById(v).style.display='none');
+  document.getElementById(id).style.display='block';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+goTo('home-view');
+
+/* TOAST + COPY */
+function cp(text,btn){
+  navigator.clipboard.writeText(text).catch(()=>{
+    const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+  });
+  const orig=btn.innerHTML;
+  btn.innerHTML='✓ Copiado!';
+  btn.classList.add('copied');
+  setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied');},2200);
+  const toast=document.getElementById('toast');
+  toast.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t=setTimeout(()=>toast.classList.remove('show'),2500);
+}
+
+/* IMAGE VIEWER */
+function openImg(src){
+  document.getElementById('img-modal-src').src=src;
+  document.getElementById('img-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeImg(){
+  document.getElementById('img-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+/* LOAD DYNAMIC DATA */
+async function loadData(){
+  try{
+    const r=await fetch(`${RAW}/links_data.json?t=${Date.now()}`);
+    if(!r.ok)return;
+    const d=await r.json();
+
+    // BANNERS
+    if(d.banners&&d.banners.length){
+      const sec=document.getElementById('banner-section');
+      sec.style.display='block';
+      let html='';
+      d.banners.forEach((b,i)=>{
+        html+=`<div class="banner-slide${i===0?' active':''}" style="min-height:${b.img?'160px':'80px'}">
+          ${b.img?`<img src="${b.img}" alt="">`:''}
+          <div class="b-text">
+            <div class="b-title">${b.title||''}</div>
+            ${b.sub?`<div class="b-sub">${b.sub}</div>`:''}
+            ${b.link?`<a href="${b.link}" target="_blank" class="b-cta">${b.cta||'Ver mais'}</a>`:''}
+          </div>
+        </div>`;
+      });
+      if(d.banners.length>1){
+        html+=`<div class="banner-dots">${d.banners.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join('')}</div>`;
+      }
+      sec.innerHTML=html;
+      if(d.banners.length>1){
+        let ci=0;
+        const slides=sec.querySelectorAll('.banner-slide'),dots=sec.querySelectorAll('.banner-dots span');
+        setInterval(()=>{
+          slides[ci].classList.remove('active');dots[ci].classList.remove('on');
+          ci=(ci+1)%slides.length;
+          slides[ci].classList.add('active');dots[ci].classList.add('on');
+        },4000);
+      }
+    }
+
+    // MÚSICA
+    if(d.music&&d.music.title){
+      const sec=document.getElementById('music-section');
+      sec.style.display='block';
+      const m=d.music;
+      const platIcons={spotify:'<svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',youtube:'<svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>'};
+      sec.innerHTML=`<a href="${m.link||'#'}" target="_blank" class="music-card">
+        ${m.thumb?`<img class="music-thumb" src="${m.thumb}" alt="">`:'<div class="music-thumb"></div>'}
+        <div class="music-info">
+          <div class="music-title">${m.title}</div>
+          <div class="music-artist">${m.artist||''}</div>
+          <div class="music-plat">${m.platform||''}</div>
         </div>
-
-        <button onclick="toggleView('zodiac-view')" class="link-button zodiac-btn flex items-center justify-center w-full p-4 rounded-2xl mb-8 text-xl shadow-[0_0_15px_rgba(255,215,0,0.4)]">
-            <i class="fas fa-bolt mr-3"></i> PROMPTS: CAVALEIROS DO ZODÍACO
-        </button>
-
-        <div class="grid grid-cols-2 gap-4">
-            <!-- Card 1 -->
-            <div class="prompt-card rounded-2xl p-3">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3">
-                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: traje de Qin Shi Huang do anime Record of Ragnarok</p>
-                <button id="btn-lab-1" onclick="copyPrompt('Crie uma imagem minha usando o traje de Qin Shi Huang do anime Record of Ragnarok...', 'btn-lab-1')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
-                    <i class="far fa-copy"></i> COPIAR PROMPT
-                </button>
-            </div>
-            <!-- Card 2 -->
-            <div class="prompt-card rounded-2xl p-3">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3">
-                <p class="text-[9px] text-gray-500 mb-2 line-clamp-2 italic">Prompt: wearing Columbinas costume from Genshin Impact</p>
-                <button id="btn-lab-2" onclick="copyPrompt('Create an image of me wearing Columbinas costume...', 'btn-lab-2')" class="w-full py-2 bg-gray-700 hover:bg-fuchsia-600 text-[10px] font-black rounded-lg transition-all flex items-center justify-center gap-2">
-                    <i class="far fa-copy"></i> COPIAR PROMPT
-                </button>
-            </div>
-            <!-- Outros cards seriam mantidos aqui... -->
+        <div class="music-icon">${m.platform&&platIcons[m.platform.toLowerCase()]?platIcons[m.platform.toLowerCase()]:''}
+          <div class="bars"><span></span><span></span><span></span><span></span></div>
         </div>
+      </a>`;
+    }
 
-        <button onclick="toggleView('home-view')" class="mt-12 block mx-auto text-[10px] uppercase tracking-widest text-gray-500 hover:text-white underline decoration-fuchsia-500 underline-offset-4">Voltar ao Início</button>
-    </div>
+    // HIGHLIGHTS
+    if(d.highlights&&d.highlights.length){
+      const sec=document.getElementById('highlights-section'),grid=document.getElementById('hl-grid');
+      sec.style.display='block';
+      grid.innerHTML=d.highlights.map(h=>`
+        <div class="hl-item" onclick="${h.link?`window.open('${h.link}','_blank')`:`openImg('${h.img}')`}">
+          ${h.img?`<img src="${h.img}" alt="">`:''}
+          <div class="hl-over">
+            <div class="hl-title">${h.title||''}</div>
+            ${h.tag?`<div class="hl-tag">${h.tag}</div>`:''}
+          </div>
+        </div>`).join('');
+    }
 
-    <!-- PÁGINA EXCLUSIVA: CAVALEIROS DO ZODIACO -->
-    <div id="zodiac-view" class="linktree-container w-full max-w-lg mx-auto relative hidden border-yellow-500/50">
-        <header class="flex items-center justify-between mb-8">
-            <button onclick="toggleView('ia-view')" class="text-yellow-500 hover:text-white transition-all"><i class="fas fa-arrow-left text-xl"></i></button>
-            <h2 class="text-2xl font-black text-yellow-500 tracking-tighter">SANTUÁRIO DE PROMPTS</h2>
-            <div class="w-6"></div> 
-        </header>
-
-        <div class="grid grid-cols-2 gap-4">
-            <!-- Card 1 (Seiya Sagitário) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Seiya de Sagitário Ouro</p>
-                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura dourada. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante, peito aberto e ombros firmes, transmitindo heroísmo, coragem, honra e poder sereno. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença divina. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas do ouro da armadura – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um dourado luminoso misturado com tons de amarelo e verde-oliva, com aura cósmica intensa, energia dourada pulsando ao redor do corpo, partículas de luz e névoa suave, evocando o Cosmo de Sagitário, sem roubar foco do personagem. A armadura deve apresentar: – Ouro polido de alto brilho – Texturas realistas de metal nobre – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos quentes e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser séria, confiante e determinada, olhar firme e calmo, transmitindo liderança, justiça, honra e espírito protetor. ❌ Não incluir arco, flecha, armas, personagens extras ou acessórios fora da Armadura de Ouro de Sagitário. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-1')" id="z-btn-1" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div>
-            <!-- Card 2 (Seiya de Pegasus) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEYIA%20DE%20PEGASUS.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Seiya de Pegasus</p>
-                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Pégasus, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Pégasus completa, 100% fiel ao design original do anime clássico, com armadura branca prateada e detalhes em vermelho intenso, capacete de Pégasus com chifres curvos dourados, peitoral estilizado, ombreiras aerodinâmicas e manoplas robustas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura de Pégasus. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com o braço elevado à frente do corpo em posição de ataque, punho fechado, o outro braço recuado, e o tronco levemente girado, transmitindo impulso, coragem, honra e poder explosivo. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura branca prateada – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um azul cósmico profundo misturado com tons de turquesa e branco luminoso, com explosões de energia, partículas estelares, trilhas de luz e névoa leve, evocando o Cosmo de Pégasus, sem roubar foco do personagem. A armadura deve apresentar: – Metal branco-prateado polido de alto brilho – Texturas realistas de metal – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos frios e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser intensa, determinada e corajosa, olhar firme e ardente, maxilar tensionado, transmitindo espírito de luta, esperança e perseverança. ❌ Não incluir armas, cenários extras, personagens adicionais ou acessórios fora da Armadura de Bronze de Pégasus. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-2')" id="z-btn-2" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div>
-            <!-- Card 3 (Shiryu de Dragão) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Shiryu de Dragão</p>
-                <button onclick="copyPrompt('Create an image of me as Shiryu of the Dragon from the anime Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet, shoulder plates and arm guards. Pose me exactly like the reference image, with the arm raised in front of the body and the torso slightly turned, conveying strength, discipline and calm power. The image should feature intense cinematic lighting with strong contrast, captured from a slightly low, upward-facing angle to emphasize the chest, jawline and heroic posture. The background must be a deep emerald green mixed with dark shadows and subtle cosmic energy, matching the Dragon theme. Lighting is tightly directional, highlighting the metallic reflections of the armor and casting dramatic shadows to sculpt the muscles and armor plates with precision. The expression should be serious and focused, eyes determined, conveying inner strength and honor. The armor must be highly detailed, realistic, and faithful to the anime’s original colors and textures, with polished emerald metal, sharp edges and glowing highlights. Preserve my exact facial structure, hairstyle and hair color as closely as possible to the reference photo, with minimal retouching to keep natural skin texture. No additional props or accessories beyond Shiryu’s Dragon Armor. The visual impact should rely purely on posture, armor design, lighting and color contrast, evoking epic anime heroism and quiet dominance.', 'z-btn-3')" id="z-btn-3" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div>
-            <!-- Card 4 (Hyoga de Cisne) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/HYOGA%20DE%20CISNE.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Hyoga de Cisne</p>
-                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Hyoga de Cisne, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Cisne completa, 100% fiel ao design original do anime clássico, com armadura em tons azul-gelo, prata e branco, capacete de Cisne com asas laterais características, peitoral elegante, ombreiras afiadas e manoplas refinadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a armadura de Cisne. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com o braço elevado à frente do corpo apontando para o inimigo, mão semiaberta ou punho tensionado, e o tronco levemente girado, transmitindo frieza, elegância, disciplina e poder controlado. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura azul-prateada – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas que esculpem músculos e armadura com precisão O fundo deve ser um azul glacial profundo misturado com branco luminoso, com cristais de gelo flutuando, névoa fria, partículas congeladas e trilhas de energia azul-clara, evocando o Cosmo de Cisne, sem roubar foco do personagem. A armadura deve apresentar: – Metal azul-gelo polido de alto brilho – Texturas realistas de metal frio – Micro-arranhões sutis e desgaste mínimo de batalha – Realces luminosos frios e naturais – Design fiel ao anime clássico, sem releituras modernas A expressão deve ser fria, séria e determinada, olhar penetrante e calmo, maxilar firme, transmitindo autocontrole, honra e força interior. ❌ Não incluir armas, cenários extras, personagens adicionais ou acessórios fora da Armadura de Bronze de Cisne. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-4')" id="z-btn-4" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div> 
-            <!-- Card 5 (Shun de Andromeda) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHUN%20DE%20ANDROMEDA.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Shun de Andromeda</p>
-                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Shun de Andrômeda, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze de Andrômeda completa, 100% fiel ao design original do anime clássico, com armadura em tons rosa-magenta, branco e detalhes verde-esmeralda, capacete com chifres longos característicos, peitoral elegante, ombreiras arredondadas e manoplas refinadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a Armadura de Andrômeda. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, com um braço estendido à frente com a mão aberta em gesto defensivo e o outro braço puxando a corrente de Andrômeda, com várias seções da corrente cruzando o primeiro plano da imagem, criando profundidade e movimento dinâmico. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura heroica e destacando peitoral, ombros, mandíbula e presença imponente. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura rosa-magenta – Bordas suaves e encaixes elegantes das placas – Brilho sutil nas correntes cromadas de Andrômeda – Sombras dramáticas esculpindo músculos, rosto e armadura com precisão O fundo deve ser um rosa profundo misturado com tons verde-esmeralda e violeta, com energia cósmica sutil, partículas etéreas e névoa leve, evocando o Cosmo de Andrômeda, sem roubar foco do personagem. A armadura deve apresentar: – Metal rosa polido de alto brilho – Detalhes verde-esmeralda nos joelhos e peitoral – Texturas realistas de metal e tecido – Micro-arranhões sutis e desgaste mínimo de batalha – Design fiel ao anime clássico, sem releituras modernas As correntes de Andrômeda devem ser altamente detalhadas, metálicas, com elos realistas, algumas em primeiro plano desfocadas levemente para criar profundidade de campo, transmitindo velocidade, controle e fluidez. A expressão deve ser séria, concentrada e determinada, com leve tensão emocional no olhar, transmitindo proteção, coragem e força interior. ❌ Não incluir armas extras, cenários adicionais, personagens secundários ou acessórios fora da Armadura de Bronze de Andrômeda e suas correntes. O impacto visual deve depender exclusivamente de postura, correntes, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto, no torso e nas correntes em primeiro plano.', 'z-btn-5')" id="z-btn-5" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div>
-            <!-- Card 6 (Ikki de Fenix) -->
-            <div class="prompt-card rounded-2xl p-3 border-yellow-600/30">
-                <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IKKI%20DE%20FENIX.png?raw=true" class="w-full aspect-square object-cover rounded-xl mb-3" onclick="openImageViewer(this.src)">
-                <p class="text-[9px] text-yellow-200 mb-2 line-clamp-2">Prompt: Ikki de Fenix</p>
-                <button onclick="copyPrompt('Crie uma imagem ultrarrealista em 8K de mim como Ikki de Fênix, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Bronze da Fênix completa, 100% fiel ao design original do anime clássico, com armadura em tons azul-profundo metálico com detalhes laranja-dourados no elmo, capacete com os dois chifres longos característicos da Fênix, peitoral robusto em formato de ave, ombreiras largas e manoplas angulares. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência — formato do rosto, olhos, sobrancelhas, nariz, boca, barba, linha do maxilar, proporções faciais, tom de pele, textura natural da pele, cabelo, cor e estilo do cabelo. Não reinterpretar, não suavizar, não alterar traços. Apenas integração perfeita do rosto humano real com a Armadura da Fênix. Retoques mínimos, mantendo poros, microtexturas e realismo extremo da pele. A pose deve ser idêntica à imagem de referência, em postura firme e imponente, corpo ereto, braços relaxados ao lado do corpo com punhos cerrados, tronco levemente projetado para frente, transmitindo domínio absoluto, resistência, orgulho e poder contido. A câmera deve estar em um ângulo levemente baixo (low angle), apontada para cima, reforçando a postura intimidadora e destacando peitoral, ombros, mandíbula e presença dominante. Iluminação cinematográfica intensa, altamente direcional, com alto contraste, destacando: – Reflexos metálicos realistas da armadura azul – Brilho dourado nos chifres e detalhes do elmo – Bordas afiadas e encaixes precisos das placas – Sombras dramáticas esculpindo músculos, rosto e armadura com precisão. O fundo deve ser um azul-escuro profundo com tons vermelho-incandescente e laranja, com energia cósmica sutil em forma de partículas flamejantes e névoa quente, evocando o Cosmo da Fênix, sem roubar foco do personagem. A armadura deve apresentar: – Metal azul polido de alto brilho – Detalhes laranja-dourados intensos no elmo e no cinto – Texturas realistas de metal e couro – Micro-arranhões sutis e desgaste mínimo de batalha – Design fiel ao anime clássico, sem releituras modernas. A expressão deve ser séria, fria e intimidadora, olhar penetrante e determinado, transmitindo solidão, força inabalável, orgulho e espírito indestrutível. ❌ Não incluir armas, asas extras, fogo literal, cenários adicionais, personagens secundários ou acessórios fora da Armadura de Bronze da Fênix. O impacto visual deve depender exclusivamente de postura, armadura, iluminação, contraste e fidelidade facial extrema. Estilo visual: ultrarrealismo cinematográfico, qualidade de filme AAA, render humano-realista, nível Hollywood VFX, nitidez extrema, profundidade de campo controlada, foco preciso no rosto e no torso.', 'z-btn-6')" id="z-btn-6" class="w-full py-2 bg-yellow-600 text-black text-[10px] font-black rounded-lg">COPIAR</button>
-            </div>
-            <!-- Outros cards omitidos ... -->
-        </div>
-        <p class="text-center mt-8 text-xs text-yellow-600 italic">"Faça elevar o Cosmo no seu coração!"</p>
-    </div>
-
-    <script>
-        // --- WEBGL BACKGROUND ---
-        let scene, camera, renderer, particles;
-        let mouseX = 0, mouseY = 0;
-
-        function initWebGL() {
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 5;
-            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl-bg'), antialias: true, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 2000;
-            const posArray = new Float32Array(particlesCount * 3);
-            for (let i = 0; i < particlesCount * 3; i++) posArray[i] = (Math.random() - 0.5) * 15;
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-            const particlesMaterial = new THREE.PointsMaterial({ size: 0.02, color: '#d510f3', transparent: true, opacity: 0.7, blending: THREE.AdditiveBlending });
-            particles = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particles);
-
-            const particles2 = new THREE.Points(particlesGeometry.clone(), new THREE.PointsMaterial({ size: 0.015, color: '#3b82f6', transparent: true, opacity: 0.4 }));
-            particles2.rotation.y = Math.PI;
-            scene.add(particles2);
-
-            document.addEventListener('mousemove', (e) => { mouseX = (e.clientX - window.innerWidth / 2) / 100; mouseY = (e.clientY - window.innerHeight / 2) / 100; });
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-            animate();
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-            particles.rotation.y += 0.0015;
-            scene.rotation.y += (mouseX - scene.rotation.y) * 0.05;
-            scene.rotation.x += (mouseY - scene.rotation.x) * 0.05;
-            renderer.render(scene, camera);
-        }
-
-        // --- IMAGE VIEWER LOGIC ---
-        function openImageViewer(src) {
-            const modal = document.getElementById('image-viewer-modal');
-            const img = document.getElementById('full-res-image');
-            img.src = src;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeImageViewer() {
-            const modal = document.getElementById('image-viewer-modal');
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-
-        // --- NAVIGATION ---
-        function toggleView(viewId) {
-            document.getElementById('home-view').classList.add('hidden');
-            document.getElementById('ia-view').classList.add('hidden');
-            document.getElementById('zodiac-view').classList.add('hidden');
-            document.getElementById(viewId).classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function copyPrompt(text, btnId) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            showToast();
-            const btn = document.getElementById(btnId);
-            const old = btn.innerText;
-            btn.innerText = "COPIADO!";
-            setTimeout(() => btn.innerText = old, 2000);
-        }
-
-        function showToast() {
-            const toast = document.getElementById("toast");
-            toast.className = "show";
-            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
-        }
-
-        window.onload = initWebGL;
-    </script>
+    // PROMPTS EXTRAS
+    if(d.prompts&&d.prompts.length){
+      const grid=document.getElementById('prompts-grid');
+      d.prompts.forEach(p=>{
+        const div=document.createElement('div');
+        div.className='pcard';
+        div.innerHTML=`
+          ${p.img?`<img src="${p.img}" alt="" onclick="openImg(this.src)">`:''}
+          <div class="pcard-desc">${p.desc||''}</div>
+          <button class="copy-btn" onclick="cp(\`${(p.prompt||'').replace(/`/g,'\\`')}\`,this)"><span>⧉</span> Copiar Prompt</button>`;
+        grid.appendChild(div);
+      });
+    }
+  } catch(e){console.log('Sem dados dinâmicos ainda')}
+}
+loadData();
+</script>
 </body>
 </html>
