@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — MeusLinks</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#07050f;--s:#110e1a;--b:rgba(255,255,255,.07);--w:#f0e8ff;--dim:rgba(240,232,255,.3);--p:#c026d3;--acc:#a855f7}
+body{background:var(--bg);color:var(--w);font-family:'DM Mono',monospace;min-height:100vh}
+
+#login{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:100}
+#login h1{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--dim);letter-spacing:.1em}
+#login input{background:var(--s);border:1px solid var(--b);color:var(--w);padding:12px 18px;font-family:'DM Mono',monospace;font-size:13px;width:260px;outline:none;border-radius:8px}
+#login input:focus{border-color:rgba(192,38,211,.4)}
+#login button{background:var(--p);color:#fff;border:none;padding:12px 32px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;border-radius:8px;cursor:pointer;width:260px}
+#login .err{font-size:10px;color:#f87171;height:14px;letter-spacing:.1em}
+#app{display:none}
+
+header{padding:20px 32px;border-bottom:1px solid var(--b);display:flex;justify-content:space-between;align-items:center;background:var(--s)}
+header h1{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:.05em;color:var(--dim)}
+.hbtn{background:none;border:1px solid var(--b);color:var(--dim);padding:7px 16px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .2s}
+.hbtn:hover{border-color:rgba(192,38,211,.4);color:var(--w)}
+.hbtn.pub{background:var(--p);color:#fff;border-color:var(--p)}
+.hbtn.pub:hover{opacity:.85}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--b);padding:0 32px;background:var(--s)}
+.tab{background:none;border:none;color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:14px 20px 14px 0;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;transition:all .2s}
+.tab.on{color:var(--w);border-bottom-color:var(--p)}
+.tab:hover{color:rgba(240,232,255,.7)}
+
+.panels{padding:32px}
+.panel{display:none}
+.panel.on{display:block}
+
+/* FORM */
+.f-title{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--b)}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;background:var(--s);border:1px solid var(--b);color:var(--w);padding:10px 14px;font-family:'DM Mono',monospace;font-size:11px;outline:none;border-radius:8px;transition:border-color .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:rgba(192,38,211,.35)}
+.field select option{background:var(--bg)}
+.field textarea{height:72px;resize:none;line-height:1.6}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.img-prev{margin-top:10px;width:100%;aspect-ratio:2/1;background:var(--s);border:1px solid var(--b);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.img-prev img{width:100%;height:100%;object-fit:cover;display:none}
+.img-prev span{font-size:9px;color:var(--dim);letter-spacing:.1em}
+.fbtns{display:flex;gap:10px;margin-top:4px}
+.fbtn{padding:9px 20px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .2s;border:none}
+.fbtn.save{background:var(--p);color:#fff}
+.fbtn.save:hover{opacity:.85}
+.fbtn.clear{background:var(--s);border:1px solid var(--b);color:var(--dim)}
+.fbtn.clear:hover{color:var(--w)}
+.status{font-size:9px;letter-spacing:.1em;margin-top:12px;min-height:14px}
+.status.ok{color:#4ade80}
+.status.err{color:#f87171}
+
+/* LISTS */
+.list{display:flex;flex-direction:column;gap:6px;margin-top:20px}
+.li{background:var(--s);border:1px solid var(--b);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:10px;transition:border-color .2s}
+.li:hover{border-color:rgba(192,38,211,.2)}
+.li-thumb{width:44px;height:36px;border-radius:6px;object-fit:cover;background:rgba(255,255,255,.05);flex-shrink:0}
+.li-info{flex:1;min-width:0}
+.li-name{font-size:11px;color:var(--w);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.li-meta{font-size:9px;color:var(--dim);letter-spacing:.08em}
+.li-acts{display:flex;gap:6px;flex-shrink:0}
+.la{background:none;border:1px solid var(--b);color:var(--dim);padding:4px 8px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;text-transform:uppercase;border-radius:5px;cursor:pointer;transition:all .2s}
+.la:hover{border-color:rgba(255,255,255,.2);color:var(--w)}
+.la.del:hover{border-color:#f87171;color:#f87171}
+.empty{font-size:10px;color:var(--dim);text-align:center;padding:32px 0;letter-spacing:.1em}
+
+.sep{height:1px;background:var(--b);margin:24px 0}
+
+/* TOKEN */
+#tk-panel{position:fixed;inset:0;background:rgba(7,5,15,.92);z-index:200;display:none;align-items:center;justify-content:center}
+#tk-panel.open{display:flex}
+.tk-box{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:32px;width:380px}
+.tk-box h2{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--dim);margin-bottom:16px;letter-spacing:.05em}
+.tk-box p{font-size:10px;color:var(--dim);line-height:1.8;margin-bottom:14px;letter-spacing:.04em}
+.tk-box input{width:100%;background:var(--bg);border:1px solid var(--b);color:var(--w);padding:10px 14px;font-family:'DM Mono',monospace;font-size:11px;outline:none;border-radius:8px;margin-bottom:14px}
+.tk-acts{display:flex;gap:8px}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h1>MEUSLINKS ADMIN</h1>
+  <input type="password" id="pwd" placeholder="senha" onkeydown="if(event.key==='Enter')login()">
+  <div class="err" id="lerr"></div>
+  <button onclick="login()">ENTRAR</button>
+</div>
+
+<div id="tk-panel">
+  <div class="tk-box">
+    <h2>Token GitHub</h2>
+    <p>Personal Access Token com permissão <strong style="color:var(--w)">repo</strong>.<br>github.com → Settings → Developer Settings → Tokens (classic)</p>
+    <input type="password" id="tk-in" placeholder="ghp_...">
+    <div class="tk-acts">
+      <button class="fbtn save" onclick="saveTk()">Salvar</button>
+      <button class="fbtn clear" onclick="document.getElementById('tk-panel').classList.remove('open')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <h1>MeusLinks — Painel</h1>
+    <div style="display:flex;gap:8px">
+      <button class="hbtn" onclick="document.getElementById('tk-panel').classList.add('open')">Token</button>
+      <button class="hbtn pub" id="pub-btn" onclick="publish()">Publicar</button>
+      <button class="hbtn" onclick="logout()">Sair</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab on" onclick="switchTab('banners',this)">Banners</button>
+    <button class="tab" onclick="switchTab('highlights',this)">Destaques</button>
+    <button class="tab" onclick="switchTab('music',this)">Música</button>
+    <button class="tab" onclick="switchTab('prompts',this)">Prompts IA</button>
+  </div>
+
+  <div class="panels">
+
+    <!-- BANNERS -->
+    <div class="panel on" id="panel-banners">
+      <div class="f-title">Novo Banner</div>
+      <div class="field"><label>Título</label><input id="b-title" placeholder="Título do banner"></div>
+      <div class="field"><label>Subtítulo</label><input id="b-sub" placeholder="Subtítulo opcional"></div>
+      <div class="field"><label>URL da Imagem de Fundo</label><input id="b-img" placeholder="https://..." oninput="prev('b-img','b-prev')">
+        <div class="img-prev" id="b-prev"><img id="b-prev-img"><span>Preview</span></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>Link (opcional)</label><input id="b-link" placeholder="https://..."></div>
+        <div class="field"><label>Texto do Botão</label><input id="b-cta" placeholder="Ver mais"></div>
+      </div>
+      <div class="fbtns">
+        <button class="fbtn save" onclick="addItem('banners')">Salvar</button>
+        <button class="fbtn clear" onclick="clearForm('b')">Limpar</button>
+      </div>
+      <div class="status" id="status-banners"></div>
+      <div class="sep"></div>
+      <div class="list" id="list-banners"></div>
+    </div>
+
+    <!-- HIGHLIGHTS -->
+    <div class="panel" id="panel-highlights">
+      <div class="f-title">Novo Destaque</div>
+      <div class="field"><label>Título</label><input id="h-title" placeholder="Título do destaque"></div>
+      <div class="field"><label>Tag / Categoria</label><input id="h-tag" placeholder="ex: Fotografia"></div>
+      <div class="field"><label>URL da Imagem</label><input id="h-img" placeholder="https://..." oninput="prev('h-img','h-prev')">
+        <div class="img-prev" id="h-prev"><img id="h-prev-img"><span>Preview</span></div>
+      </div>
+      <div class="field"><label>Link ao Clicar (opcional)</label><input id="h-link" placeholder="https://..."></div>
+      <div class="fbtns">
+        <button class="fbtn save" onclick="addItem('highlights')">Salvar</button>
+        <button class="fbtn clear" onclick="clearForm('h')">Limpar</button>
+      </div>
+      <div class="status" id="status-highlights"></div>
+      <div class="sep"></div>
+      <div class="list" id="list-highlights"></div>
+    </div>
+
+    <!-- MÚSICA -->
+    <div class="panel" id="panel-music">
+      <div class="f-title">Música em Destaque</div>
+      <div class="field"><label>Título da Música / Álbum</label><input id="m-title" placeholder="Nome da música"></div>
+      <div class="field"><label>Artista</label><input id="m-artist" placeholder="Nome do artista"></div>
+      <div class="field"><label>Plataforma</label>
+        <select id="m-platform">
+          <option value="Spotify">Spotify</option>
+          <option value="YouTube">YouTube</option>
+          <option value="SoundCloud">SoundCloud</option>
+          <option value="Outro">Outro</option>
+        </select>
+      </div>
+      <div class="field"><label>URL da Capa</label><input id="m-thumb" placeholder="https://..." oninput="prev('m-thumb','m-prev')">
+        <div class="img-prev" id="m-prev" style="aspect-ratio:1;max-width:120px"><img id="m-prev-img"><span>Preview</span></div>
+      </div>
+      <div class="field"><label>Link da Música</label><input id="m-link" placeholder="https://open.spotify.com/..."></div>
+      <div class="fbtns">
+        <button class="fbtn save" onclick="saveMusic()">Salvar Música</button>
+        <button class="fbtn clear" onclick="clearForm('m')">Limpar</button>
+      </div>
+      <div class="status" id="status-music"></div>
+    </div>
+
+    <!-- PROMPTS IA -->
+    <div class="panel" id="panel-prompts">
+      <div class="f-title">Novo Prompt de IA</div>
+      <div class="field"><label>Descrição curta</label><input id="p-desc" placeholder="ex: Traje de Goku — Dragon Ball"></div>
+      <div class="field"><label>URL da Imagem de Resultado</label><input id="p-img" placeholder="https://..." oninput="prev('p-img','p-prev')">
+        <div class="img-prev" id="p-prev"><img id="p-prev-img"><span>Preview</span></div>
+      </div>
+      <div class="field"><label>Prompt Completo</label><textarea id="p-prompt" placeholder="Cole aqui o prompt que gerou essa imagem..."></textarea></div>
+      <div class="fbtns">
+        <button class="fbtn save" onclick="addItem('prompts')">Salvar</button>
+        <button class="fbtn clear" onclick="clearForm('p')">Limpar</button>
+      </div>
+      <div class="status" id="status-prompts"></div>
+      <div class="sep"></div>
+      <div class="list" id="list-prompts"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const OWNER='goguenblouts',REPO='MeusLinks',BRANCH='main';
+const PASS='marcelio2024';
+let data={banners:[],highlights:[],music:{},prompts:[]};
+let sha=null;
+
+function login(){
+  if(document.getElementById('pwd').value===PASS){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    load();
+  } else {
+    document.getElementById('lerr').textContent='Senha incorreta.';
+    setTimeout(()=>document.getElementById('lerr').textContent='',2000);
+  }
+}
+function logout(){document.getElementById('app').style.display='none';document.getElementById('login').style.display='flex';document.getElementById('pwd').value='';}
+
+function getTk(){return localStorage.getItem('mv_links_token')||'';}
+function saveTk(){const t=document.getElementById('tk-in').value.trim();if(!t)return;localStorage.setItem('mv_links_token',t);document.getElementById('tk-panel').classList.remove('open');setStatus('music','Token salvo.','ok');}
+
+function switchTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('panel-'+id).classList.add('on');
+}
+
+function prev(inputId,prevId){
+  const url=document.getElementById(inputId).value.trim();
+  const img=document.getElementById(prevId+'-img');
+  const ph=document.getElementById(prevId).querySelector('span');
+  if(url){img.src=url;img.style.display='block';if(ph)ph.style.display='none';}
+  else{img.style.display='none';if(ph)ph.style.display='block';}
+}
+
+function clearForm(pre){
+  ['title','sub','img','link','cta','tag','desc','prompt','artist','thumb','platform'].forEach(f=>{
+    const el=document.getElementById(pre+'-'+f);
+    if(el){el.value=el.tagName==='SELECT'?el.options[0].value:'';}
+  });
+  ['prev'].forEach(p=>{
+    const img=document.getElementById(pre+'-'+p+'-img');
+    const ph=document.getElementById(pre+'-'+p)?.querySelector('span');
+    if(img){img.style.display='none';img.src='';}
+    if(ph)ph.style.display='block';
+  });
+}
+
+async function load(){
+  try{
+    const r=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/links_data.json`,{headers:{Authorization:`token ${getTk()}`}});
+    const d=await r.json();
+    if(d.content){
+      sha=d.sha;
+      data=JSON.parse(decodeURIComponent(escape(atob(d.content.replace(/\n/g,'')))));
+      data.banners=data.banners||[];data.highlights=data.highlights||[];data.prompts=data.prompts||[];data.music=data.music||{};
+    }
+  } catch(e){}
+  render();
+}
+
+async function publish(){
+  if(!getTk()){document.getElementById('tk-panel').classList.add('open');return;}
+  const btn=document.getElementById('pub-btn');
+  btn.textContent='Publicando...';
+  try{
+    const content=btoa(unescape(encodeURIComponent(JSON.stringify(data,null,2))));
+    const body={message:'update: links_data.json via painel',content,branch:BRANCH};
+    if(sha)body.sha=sha;
+    const r=await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/links_data.json`,{method:'PUT',headers:{Authorization:`token ${getTk()}`,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    const res=await r.json();
+    if(res.content){sha=res.content.sha;setStatus('music','✓ Publicado! Site atualiza em ~30s.','ok');}
+    else setStatus('music','Erro: '+(res.message||'tente novamente'),'err');
+  } catch(e){setStatus('music','Erro de conexão.','err');}
+  btn.textContent='Publicar';
+}
+
+function addItem(type){
+  const pre={banners:'b',highlights:'h',prompts:'p'}[type];
+  const item={id:Date.now().toString()};
+  if(type==='banners'){
+    item.title=val('b-title');item.sub=val('b-sub');item.img=val('b-img');item.link=val('b-link');item.cta=val('b-cta')||'Ver mais';
+    if(!item.title&&!item.img){setStatus('banners','Título ou imagem obrigatório.','err');return;}
+  } else if(type==='highlights'){
+    item.title=val('h-title');item.tag=val('h-tag');item.img=val('h-img');item.link=val('h-link');
+    if(!item.title&&!item.img){setStatus('highlights','Título ou imagem obrigatório.','err');return;}
+  } else if(type==='prompts'){
+    item.desc=val('p-desc');item.img=val('p-img');item.prompt=val('p-prompt');
+    if(!item.prompt){setStatus('prompts','Prompt obrigatório.','err');return;}
+  }
+  data[type].push(item);
+  render();
+  clearForm(pre);
+  setStatus(type,'Salvo. Clique Publicar para enviar.','ok');
+}
+
+function saveMusic(){
+  data.music={title:val('m-title'),artist:val('m-artist'),platform:val('m-platform'),thumb:val('m-thumb'),link:val('m-link')};
+  if(!data.music.title){setStatus('music','Título obrigatório.','err');return;}
+  setStatus('music','Música salva. Clique Publicar.','ok');
+}
+
+function delItem(type,id){
+  if(!confirm('Deletar?'))return;
+  data[type]=data[type].filter(x=>x.id!==id);
+  render();
+}
+
+function val(id){return(document.getElementById(id)?.value||'').trim();}
+function setStatus(panel,msg,type){const el=document.getElementById('status-'+panel);if(el){el.textContent=msg;el.className='status '+type;}}
+
+function render(){
+  renderList('banners',x=>`${x.title||'—'}<br><span style="opacity:.4;font-size:8px">${x.sub||''}</span>`);
+  renderList('highlights',x=>`${x.title||'—'}<br><span style="opacity:.4;font-size:8px">${x.tag||''}</span>`);
+  renderList('prompts',x=>`${x.desc||'Prompt'}<br><span style="opacity:.4;font-size:8px">${(x.prompt||'').substring(0,40)}...</span>`);
+  // fill music form
+  if(data.music&&data.music.title){
+    ['title','artist','platform','thumb','link'].forEach(f=>{
+      const el=document.getElementById('m-'+f);
+      if(el)el.value=data.music[f]||'';
+    });
+  }
+}
+
+function renderList(type,labelFn){
+  const list=document.getElementById('list-'+type);
+  if(!list)return;
+  if(!data[type]||!data[type].length){list.innerHTML=`<div class="empty">Nenhum item.</div>`;return;}
+  list.innerHTML=data[type].map(x=>`
+    <div class="li">
+      ${x.img?`<img class="li-thumb" src="${x.img}" alt="">`:`<div class="li-thumb"></div>`}
+      <div class="li-info"><div class="li-name">${labelFn(x)}</div></div>
+      <div class="li-acts">
+        <button class="la del" onclick="delItem('${type}','${x.id}')">Del</button>
+      </div>
+    </div>`).join('');
+}
+</script>
+</body>
+</html>
