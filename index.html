@@ -22,31 +22,25 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
 /* ── INTRO SCREEN ── */
 #intro{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity 1s,visibility 1s}
 #intro.out{opacity:0;visibility:hidden}
-.mv-svg{width:220px;height:160px;overflow:visible}
-/* cada path começa invisível e é desenhado */
-.mv-svg .s{
-  fill:none;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-  stroke-dasharray:600;
-  stroke-dashoffset:600;
-}
-/* traço base dourado */
-.s1{stroke:url(#ggrad);stroke-width:4;animation:draw 1s cubic-bezier(.4,0,.2,1) forwards .1s}
-.s2{stroke:url(#ggrad);stroke-width:4;animation:draw .7s cubic-bezier(.4,0,.2,1) forwards .9s}
-.s3{stroke:url(#ggrad);stroke-width:4;animation:draw .8s cubic-bezier(.4,0,.2,1) forwards 1.4s}
-.s4{stroke:url(#ggrad);stroke-width:3.5;animation:draw .6s cubic-bezier(.4,0,.2,1) forwards 2s}
-/* brilho */
-.sg{stroke:rgba(255,240,160,.5);stroke-width:1.5;animation:draw .5s ease forwards 2.4s,glowpulse 1.5s ease-in-out 2.9s infinite alternate}
-@keyframes draw{to{stroke-dashoffset:0}}
-@keyframes glowpulse{from{opacity:.3}to{opacity:.9}}
-/* fill dourado do logo que aparece depois do traço */
-.mv-fill{opacity:0;transition:opacity 1s;animation:fillIn 1s ease forwards 2.8s}
-@keyframes fillIn{to{opacity:1}}
 
-.intro-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:transparent;background:linear-gradient(135deg,#b8860b,#ffd700,#daa520,#ffd700,#b8860b);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;transform:translateY(6px);transition:opacity .8s,transform .8s;margin-top:20px;text-align:center;animation:none}
-.intro-name.vis{opacity:1;transform:translateY(0)}
-.intro-skip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,255,.25);opacity:0;margin-top:14px;transition:opacity .6s;cursor:pointer;background:none;border:none}
+.intro-word{overflow:hidden;display:block}
+.intro-word span{
+  display:inline-block;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;
+  color:var(--w);
+  opacity:0;
+  transform:translateY(30px);
+  transition:opacity .5s,transform .5s;
+}
+.intro-word.name1 span{font-size:clamp(42px,12vw,64px);letter-spacing:.06em}
+.intro-word.name2 span{font-size:clamp(42px,12vw,64px);letter-spacing:.06em;font-style:italic;color:rgba(245,240,255,.35)}
+.intro-word span.vis{opacity:1;transform:translateY(0)}
+
+.intro-bar{width:0;height:1px;background:linear-gradient(to right,transparent,rgba(245,240,255,.3),transparent);margin-top:24px;transition:width 1s ease}
+.intro-bar.vis{width:200px}
+
+.intro-skip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,255,.18);opacity:0;margin-top:20px;transition:opacity .5s;cursor:pointer;background:none;border:none}
 .intro-skip.vis{opacity:1}
 
 /* ── VIEWS ── */
@@ -210,59 +204,9 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
 
 <!-- ════ INTRO ════ -->
 <div id="intro">
-  <svg class="mv-svg" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <!-- gradiente dourado para o traço -->
-      <linearGradient id="ggrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#b8860b"/>
-        <stop offset="30%" stop-color="#ffd700"/>
-        <stop offset="60%" stop-color="#daa520"/>
-        <stop offset="100%" stop-color="#ffd700"/>
-      </linearGradient>
-      <!-- gradiente dourado fill -->
-      <linearGradient id="gfill" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#b8860b"/>
-        <stop offset="25%" stop-color="#ffd700"/>
-        <stop offset="50%" stop-color="#ffe066"/>
-        <stop offset="75%" stop-color="#daa520"/>
-        <stop offset="100%" stop-color="#b8860b"/>
-      </linearGradient>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="3" result="blur"/>
-        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-    </defs>
-
-    <!-- FILL (aparece depois do traço) -->
-    <g class="mv-fill">
-      <!-- Coluna esquerda M -->
-      <rect x="28" y="18" width="7" height="60" rx="1" fill="url(#gfill)"/>
-      <!-- Pico central alto -->
-      <rect x="48" y="8" width="7" height="70" rx="1" fill="url(#gfill)"/>
-      <!-- Coluna direita M / esquerda V -->
-      <rect x="68" y="18" width="7" height="60" rx="1" fill="url(#gfill)"/>
-      <!-- Arco base M -->
-      <path d="M28,70 Q47,90 68,70" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
-      <!-- Perna esquerda V -->
-      <path d="M75,18 L100,88" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
-      <!-- Perna direita V / arco grande -->
-      <path d="M100,88 Q130,120 165,35" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
-    </g>
-
-    <!-- TRAÇOS ANIMADOS (desenhados primeiro) -->
-    <!-- s1: coluna esq M + pico central + coluna dir M (traços verticais) -->
-    <path class="s s1" d="M31,78 L31,18 M51,88 L51,8 M71,78 L71,18"/>
-    <!-- s2: arco base do M -->
-    <path class="s s2" d="M31,72 Q50,92 71,72"/>
-    <!-- s3: perna V esquerda + direita (o grande arco) -->
-    <path class="s s3" d="M78,20 L102,90 Q132,124 166,36"/>
-    <!-- s4: topo da haste central (detalhe que sobe mais) -->
-    <path class="s s4" d="M51,8 L51,18"/>
-    <!-- brilho overlay -->
-    <path class="s sg" d="M31,72 Q50,92 71,72 M78,20 L102,90" filter="url(#glow)"/>
-  </svg>
-
-  <div class="intro-name" id="iname">Marcelio <em>Venancio</em></div>
+  <div class="intro-word name1" id="iw1"><span id="ic1">Marcelio</span></div>
+  <div class="intro-word name2" id="iw2"><span id="ic2">Venancio</span></div>
+  <div class="intro-bar" id="ibar"></div>
   <button class="intro-skip" id="iskip" onclick="skipIntro()">pular →</button>
 </div>
 
@@ -434,12 +378,18 @@ function skipIntro(){
 }
 
 // Timing: violão termina ~2.6s, nome aparece ~2.8s, skip ~3.2s, dissolve ~3.8s
-setTimeout(()=>document.getElementById('iname').classList.add('vis'), 3000);
-setTimeout(()=>document.getElementById('iskip').classList.add('vis'), 3400);
+// letra por letra: Marcelio
+setTimeout(()=>document.getElementById('ic1').classList.add('vis'), 200);
+// Venancio um pouco depois
+setTimeout(()=>document.getElementById('ic2').classList.add('vis'), 700);
+// barra
+setTimeout(()=>document.getElementById('ibar').classList.add('vis'), 1200);
+// skip
+setTimeout(()=>document.getElementById('iskip').classList.add('vis'), 1600);
 setTimeout(()=>{
   document.getElementById('intro').classList.add('out');
   revealContent();
-}, 5000);
+}, 3200);
 
 /* NAV */
 function go(id){
