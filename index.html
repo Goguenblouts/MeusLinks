@@ -20,37 +20,33 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px}
 
 /* ── INTRO SCREEN ── */
-#intro{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity .8s,visibility .8s}
+#intro{position:fixed;inset:0;z-index:9000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;transition:opacity 1s,visibility 1s}
 #intro.out{opacity:0;visibility:hidden}
-
-.guitar-svg{width:180px;height:240px}
-.guitar-svg path,
-.guitar-svg circle,
-.guitar-svg line,
-.guitar-svg ellipse{
+.mv-svg{width:220px;height:160px;overflow:visible}
+/* cada path começa invisível e é desenhado */
+.mv-svg .s{
   fill:none;
-  stroke:var(--w);
-  stroke-width:1.6;
   stroke-linecap:round;
   stroke-linejoin:round;
-  stroke-dasharray:2000;
-  stroke-dashoffset:2000;
+  stroke-dasharray:600;
+  stroke-dashoffset:600;
 }
-
-/* stagger cada parte */
-.gp1{stroke:var(--w);animation:draw 1.4s ease forwards .1s}
-.gp2{stroke:rgba(245,240,255,.7);animation:draw 1s ease forwards .8s}
-.gp3{stroke:rgba(245,240,255,.5);animation:draw .8s ease forwards 1.4s}
-.gp4{stroke:rgba(192,38,211,.6);animation:draw .6s ease forwards 1.8s}
-.gp5{stroke:rgba(168,85,247,.5);animation:draw .5s ease forwards 2.1s}
-
+/* traço base dourado */
+.s1{stroke:url(#ggrad);stroke-width:4;animation:draw 1s cubic-bezier(.4,0,.2,1) forwards .1s}
+.s2{stroke:url(#ggrad);stroke-width:4;animation:draw .7s cubic-bezier(.4,0,.2,1) forwards .9s}
+.s3{stroke:url(#ggrad);stroke-width:4;animation:draw .8s cubic-bezier(.4,0,.2,1) forwards 1.4s}
+.s4{stroke:url(#ggrad);stroke-width:3.5;animation:draw .6s cubic-bezier(.4,0,.2,1) forwards 2s}
+/* brilho */
+.sg{stroke:rgba(255,240,160,.5);stroke-width:1.5;animation:draw .5s ease forwards 2.4s,glowpulse 1.5s ease-in-out 2.9s infinite alternate}
 @keyframes draw{to{stroke-dashoffset:0}}
+@keyframes glowpulse{from{opacity:.3}to{opacity:.9}}
+/* fill dourado do logo que aparece depois do traço */
+.mv-fill{opacity:0;transition:opacity 1s;animation:fillIn 1s ease forwards 2.8s}
+@keyframes fillIn{to{opacity:1}}
 
-/* nome abaixo do violão */
-.intro-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;letter-spacing:.04em;color:var(--w);opacity:0;transform:translateY(8px);transition:opacity .8s,transform .8s;margin-top:28px;text-align:center}
-.intro-name em{font-style:italic;color:var(--dimmer)}
+.intro-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:transparent;background:linear-gradient(135deg,#b8860b,#ffd700,#daa520,#ffd700,#b8860b);background-size:200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;transform:translateY(6px);transition:opacity .8s,transform .8s;margin-top:20px;text-align:center;animation:none}
 .intro-name.vis{opacity:1;transform:translateY(0)}
-.intro-skip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--dimmer);opacity:0;margin-top:16px;transition:opacity .6s;cursor:pointer;background:none;border:none}
+.intro-skip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(245,240,255,.25);opacity:0;margin-top:14px;transition:opacity .6s;cursor:pointer;background:none;border:none}
 .intro-skip.vis{opacity:1}
 
 /* ── VIEWS ── */
@@ -214,36 +210,56 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
 
 <!-- ════ INTRO ════ -->
 <div id="intro">
-  <svg class="guitar-svg" viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg">
-    <!-- Corpo inferior (curva grande) -->
-    <path class="gp1" d="M35,95 C15,95 10,110 10,122 C10,138 22,150 40,150 C52,150 60,144 60,144 C60,144 68,150 80,150 C98,150 110,138 110,122 C110,110 105,95 85,95 C75,95 68,100 60,100 C52,100 45,95 35,95 Z"/>
-    <!-- Pescoço -->
-    <path class="gp2" d="M48,95 L45,30 L75,30 L72,95"/>
-    <!-- Cabeçalho -->
-    <path class="gp2" d="M43,30 L43,14 C43,10 47,8 60,8 C73,8 77,10 77,14 L77,30"/>
-    <!-- Buraco do corpo -->
-    <circle class="gp3" cx="60" cy="122" r="18"/>
-    <!-- Cavalete -->
-    <path class="gp3" d="M46,138 L74,138 L72,134 L48,134 Z"/>
-    <!-- Trastes -->
-    <line class="gp4" x1="46" y1="45" x2="74" y2="45"/>
-    <line class="gp4" x1="46" y1="55" x2="74" y2="55"/>
-    <line class="gp4" x1="46" y1="65" x2="74" y2="65"/>
-    <line class="gp4" x1="47" y1="75" x2="73" y2="75"/>
-    <line class="gp4" x1="47" y1="85" x2="73" y2="85"/>
-    <!-- Cordas -->
-    <line class="gp5" x1="51" y1="30" x2="49" y2="134"/>
-    <line class="gp5" x1="55" y1="30" x2="53" y2="134"/>
-    <line class="gp5" x1="60" y1="30" x2="60" y2="134"/>
-    <line class="gp5" x1="65" y1="30" x2="67" y2="134"/>
-    <line class="gp5" x1="69" y1="30" x2="71" y2="134"/>
-    <!-- Tarraxas -->
-    <circle class="gp4" cx="46" cy="14" r="2.5"/>
-    <circle class="gp4" cx="46" cy="22" r="2.5"/>
-    <circle class="gp4" cx="74" cy="14" r="2.5"/>
-    <circle class="gp4" cx="74" cy="22" r="2.5"/>
-    <circle class="gp4" cx="60" cy="11" r="2.5"/>
-    <circle class="gp4" cx="60" cy="22" r="2.5"/>
+  <svg class="mv-svg" viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <!-- gradiente dourado para o traço -->
+      <linearGradient id="ggrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#b8860b"/>
+        <stop offset="30%" stop-color="#ffd700"/>
+        <stop offset="60%" stop-color="#daa520"/>
+        <stop offset="100%" stop-color="#ffd700"/>
+      </linearGradient>
+      <!-- gradiente dourado fill -->
+      <linearGradient id="gfill" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#b8860b"/>
+        <stop offset="25%" stop-color="#ffd700"/>
+        <stop offset="50%" stop-color="#ffe066"/>
+        <stop offset="75%" stop-color="#daa520"/>
+        <stop offset="100%" stop-color="#b8860b"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- FILL (aparece depois do traço) -->
+    <g class="mv-fill">
+      <!-- Coluna esquerda M -->
+      <rect x="28" y="18" width="7" height="60" rx="1" fill="url(#gfill)"/>
+      <!-- Pico central alto -->
+      <rect x="48" y="8" width="7" height="70" rx="1" fill="url(#gfill)"/>
+      <!-- Coluna direita M / esquerda V -->
+      <rect x="68" y="18" width="7" height="60" rx="1" fill="url(#gfill)"/>
+      <!-- Arco base M -->
+      <path d="M28,70 Q47,90 68,70" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
+      <!-- Perna esquerda V -->
+      <path d="M75,18 L100,88" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
+      <!-- Perna direita V / arco grande -->
+      <path d="M100,88 Q130,120 165,35" fill="none" stroke="url(#gfill)" stroke-width="6" stroke-linecap="round"/>
+    </g>
+
+    <!-- TRAÇOS ANIMADOS (desenhados primeiro) -->
+    <!-- s1: coluna esq M + pico central + coluna dir M (traços verticais) -->
+    <path class="s s1" d="M31,78 L31,18 M51,88 L51,8 M71,78 L71,18"/>
+    <!-- s2: arco base do M -->
+    <path class="s s2" d="M31,72 Q50,92 71,72"/>
+    <!-- s3: perna V esquerda + direita (o grande arco) -->
+    <path class="s s3" d="M78,20 L102,90 Q132,124 166,36"/>
+    <!-- s4: topo da haste central (detalhe que sobe mais) -->
+    <path class="s s4" d="M51,8 L51,18"/>
+    <!-- brilho overlay -->
+    <path class="s sg" d="M31,72 Q50,92 71,72 M78,20 L102,90" filter="url(#glow)"/>
   </svg>
 
   <div class="intro-name" id="iname">Marcelio <em>Venancio</em></div>
@@ -418,12 +434,12 @@ function skipIntro(){
 }
 
 // Timing: violão termina ~2.6s, nome aparece ~2.8s, skip ~3.2s, dissolve ~3.8s
-setTimeout(()=>document.getElementById('iname').classList.add('vis'), 2600);
-setTimeout(()=>document.getElementById('iskip').classList.add('vis'), 3000);
+setTimeout(()=>document.getElementById('iname').classList.add('vis'), 3000);
+setTimeout(()=>document.getElementById('iskip').classList.add('vis'), 3400);
 setTimeout(()=>{
   document.getElementById('intro').classList.add('out');
   revealContent();
-}, 4200);
+}, 5000);
 
 /* NAV */
 function go(id){
