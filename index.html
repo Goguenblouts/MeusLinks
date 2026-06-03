@@ -4,437 +4,416 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Marcelio Venancio</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Syne:wght@700;800&family=DM+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;600;700&family=DM+Mono&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#07050f;
-  --surface:rgba(255,255,255,.04);
-  --border:rgba(255,255,255,.08);
-  --p:#c026d3;
+  --bg:#050508;
+  --p:#d510f3;
   --b:#3b82f6;
   --g:#a855f7;
   --w:#f0e8ff;
-  --dim:rgba(240,232,255,.35);
+  --dim:rgba(240,232,255,.3);
+  --card:rgba(10,8,20,0.75);
+  --border:rgba(255,255,255,.07);
 }
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--w);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
-canvas#bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+html,body{min-height:100vh;background:var(--bg);color:var(--w);font-family:'Space Grotesk',sans-serif;overflow-x:hidden}
+
+/* BG */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 /* NOISE */
-body::before{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:150px}
+body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px}
 
-/* WRAPPER */
-.wrap{position:relative;z-index:10;max-width:440px;margin:0 auto;padding:20px 16px 60px}
+/* VIEWS */
+.view{display:none;position:relative;z-index:10;min-height:100vh;padding:24px 16px 64px}
+.view.active{display:block}
+.inner{max-width:420px;margin:0 auto}
+
+/* CARD WRAPPER */
+.card{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;padding:28px 24px;position:relative;border:1px solid var(--border)}
+.card::before{content:'';position:absolute;inset:-1.5px;border-radius:25px;background:linear-gradient(135deg,var(--p),var(--b),var(--g),var(--p));background-size:300% 300%;animation:gborder 6s ease infinite,gpulse 4s ease infinite alternate;z-index:-1;opacity:.35}
+@keyframes gborder{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes gpulse{from{opacity:.2}to{opacity:.5}}
 
 /* BANNER */
-#banner-section{margin-bottom:20px;border-radius:14px;overflow:hidden;position:relative;min-height:80px;display:none}
-.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:center;border-radius:14px;overflow:hidden}
-.banner-slide.active{opacity:1;position:relative}
-.banner-slide img{width:100%;height:100%;object-fit:cover;border-radius:14px}
-.banner-slide .b-text{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:16px;background:linear-gradient(transparent,rgba(7,5,15,.85))}
-.banner-slide .b-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--w);line-height:1.2}
-.banner-slide .b-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-top:4px}
-.banner-slide a.b-cta{display:inline-block;margin-top:8px;padding:5px 14px;background:var(--p);color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;text-decoration:none}
-.banner-dots{position:absolute;bottom:10px;right:12px;display:flex;gap:5px;z-index:2}
-.banner-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .3s}
-.banner-dots span.on{background:var(--p)}
+#banner-wrap{margin-bottom:16px;display:none}
+.banner-card{position:relative;border-radius:20px;overflow:hidden;min-height:100px}
+.banner-card::before{content:'';position:absolute;inset:-1.5px;border-radius:21px;background:linear-gradient(135deg,var(--p),var(--b));z-index:-1;opacity:.5}
+.b-slide{display:none;position:relative}
+.b-slide.on{display:block}
+.b-slide img{width:100%;height:160px;object-fit:cover;display:block;border-radius:18px}
+.b-slide .b-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,5,8,.9) 0%,transparent 55%);border-radius:18px;padding:16px;display:flex;flex-direction:column;justify-content:flex-end}
+.b-title{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:.05em;color:var(--w);line-height:1}
+.b-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--dim);text-transform:uppercase;margin-top:3px}
+.b-cta{display:inline-block;margin-top:8px;padding:5px 14px;background:linear-gradient(135deg,var(--p),var(--g));color:#fff;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-radius:20px;text-decoration:none;font-weight:700}
+.b-dots{display:flex;gap:5px;justify-content:center;margin-top:8px}
+.b-dot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:background .3s}
+.b-dot.on{background:var(--p)}
 
 /* PROFILE */
-.profile{text-align:center;padding:28px 0 20px}
-.avatar-wrap{position:relative;display:inline-block;margin-bottom:14px}
-.avatar-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--p),var(--b),var(--g),var(--p));animation:spin 4s linear infinite;z-index:0}
-.avatar-ring::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--bg)}
-.avatar-wrap img{position:relative;z-index:1;width:96px;height:96px;border-radius:50%;object-fit:cover;display:block}
+.profile{text-align:center;padding:8px 0 20px}
+.av-wrap{position:relative;display:inline-block;margin-bottom:14px}
+.av-ring{position:absolute;inset:-3px;border-radius:50%;background:conic-gradient(var(--p),var(--b),var(--g),var(--p));animation:spin 4s linear infinite;z-index:0}
+.av-ring::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--bg)}
+.av-wrap img{position:relative;z-index:1;width:100px;height:100px;border-radius:50%;object-fit:cover;display:block;cursor:pointer;transition:transform .3s}
+.av-wrap img:hover{transform:scale(1.04)}
 @keyframes spin{to{transform:rotate(360deg)}}
-.p-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--w),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
-.p-bio{font-size:12px;color:var(--dim);line-height:1.6;max-width:280px;margin:0 auto}
+.p-name{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:.06em;background:linear-gradient(135deg,var(--w) 30%,var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:5px}
+.p-bio{font-size:12px;color:var(--dim);line-height:1.6;max-width:260px;margin:0 auto}
 
-/* MUSIC PLAYER */
-#music-section{margin-bottom:16px;display:none}
-.music-card{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;text-decoration:none;transition:all .3s}
-.music-card:hover{background:rgba(168,85,247,.14);border-color:rgba(168,85,247,.4);transform:translateY(-2px)}
-.music-thumb{width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;background:rgba(168,85,247,.2)}
+/* MUSIC */
+#music-wrap{margin-bottom:12px;display:none}
+.music-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(168,85,247,.07);border:1px solid rgba(168,85,247,.18);border-radius:14px;text-decoration:none;transition:all .3s;position:relative;overflow:hidden}
+.music-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(168,85,247,.06),transparent);pointer-events:none}
+.music-card:hover{border-color:rgba(168,85,247,.4);transform:translateY(-2px)}
+.music-thumb{width:46px;height:46px;border-radius:8px;object-fit:cover;flex-shrink:0;background:rgba(168,85,247,.15)}
 .music-info{flex:1;min-width:0}
 .music-title{font-size:13px;font-weight:700;color:var(--w);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .music-artist{font-family:'DM Mono',monospace;font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
-.music-plat{font-family:'DM Mono',monospace;font-size:9px;color:rgba(168,85,247,.7);margin-top:4px}
-.music-icon{width:32px;height:32px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.music-icon svg{width:20px;height:20px;fill:rgba(168,85,247,.6)}
-.bars{display:flex;gap:2px;align-items:flex-end;height:18px}
-.bars span{width:3px;background:var(--g);border-radius:2px;animation:bar .8s ease-in-out infinite alternate}
-.bars span:nth-child(2){animation-delay:.15s;height:10px}
-.bars span:nth-child(3){animation-delay:.3s;height:14px}
-.bars span:nth-child(1){height:7px}
-.bars span:nth-child(4){animation-delay:.45s;height:9px}
-@keyframes bar{from{transform:scaleY(.4)}to{transform:scaleY(1)}}
+.music-plat{font-family:'DM Mono',monospace;font-size:9px;color:rgba(168,85,247,.6);margin-top:3px}
+.bars{display:flex;gap:2px;align-items:flex-end;height:16px;flex-shrink:0}
+.bars span{width:3px;border-radius:2px;background:var(--g);animation:bar .7s ease-in-out infinite alternate}
+.bars span:nth-child(1){height:6px}
+.bars span:nth-child(2){height:10px;animation-delay:.12s}
+.bars span:nth-child(3){height:14px;animation-delay:.25s}
+.bars span:nth-child(4){height:8px;animation-delay:.38s}
+@keyframes bar{from{transform:scaleY(.3)}to{transform:scaleY(1)}}
 
 /* LINKS */
-.links-section{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
-.lbtn{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:12px;text-decoration:none;font-weight:700;font-size:14px;transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;border:1px solid transparent}
-.lbtn::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
-.lbtn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.5)}
-.lbtn .icon{width:20px;text-align:center;flex-shrink:0;font-size:16px}
-.lbtn .arr{margin-left:auto;opacity:.4;font-size:12px;transition:transform .2s,opacity .2s}
-.lbtn:hover .arr{opacity:.8;transform:translateX(3px)}
+.links{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.lbtn{display:flex;align-items:center;gap:11px;padding:13px 16px;border-radius:13px;text-decoration:none;font-weight:700;font-size:14px;transition:all .3s;border:1px solid var(--border);background:rgba(255,255,255,.03);position:relative;overflow:hidden}
+.lbtn::after{content:'→';margin-left:auto;opacity:.3;font-size:13px;transition:all .2s}
+.lbtn:hover{transform:translateY(-2px);border-color:rgba(213,16,243,.3);background:rgba(213,16,243,.06)}
+.lbtn:hover::after{opacity:.8;transform:translateX(3px)}
+.lbtn-icon{font-size:17px;flex-shrink:0}
+.lbtn.portfolio{background:linear-gradient(135deg,rgba(59,130,246,.12),rgba(99,102,241,.12));border-color:rgba(99,102,241,.25)}
+.lbtn.portfolio:hover{background:linear-gradient(135deg,rgba(59,130,246,.22),rgba(99,102,241,.22));border-color:rgba(99,102,241,.5)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.grid2 .lbtn{font-size:13px;padding:11px 13px}
 
-.l-portfolio{background:linear-gradient(135deg,rgba(59,130,246,.15),rgba(99,102,241,.15));border-color:rgba(99,102,241,.3);color:var(--w)}
-.l-portfolio:hover{border-color:rgba(99,102,241,.6);background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(99,102,241,.25))}
-.l-ig{background:var(--surface);border-color:var(--border)}
-.l-ig:hover{border-color:rgba(214,60,163,.4);background:rgba(214,60,163,.06)}
-.l-tt{background:var(--surface);border-color:var(--border)}
-.l-tt:hover{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.04)}
-.l-dc{background:var(--surface);border-color:var(--border)}
-.l-dc:hover{border-color:rgba(88,101,242,.4);background:rgba(88,101,242,.06)}
-.l-yt{background:var(--surface);border-color:var(--border)}
-.l-yt:hover{border-color:rgba(255,0,0,.3);background:rgba(255,0,0,.04)}
-.l-sp{background:var(--surface);border-color:var(--border)}
-.l-sp:hover{border-color:rgba(29,185,84,.4);background:rgba(29,185,84,.05)}
-
-/* IA LAB BTN */
-.ia-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--g));color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:800;letter-spacing:.03em;text-decoration:none;transition:all .3s;box-shadow:0 4px 24px rgba(192,38,211,.25);border:none;width:100%;cursor:pointer}
-.ia-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(192,38,211,.4)}
+/* IA BTN */
+.ia-btn{width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--p),var(--g));color:#fff;font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:.08em;border:none;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 4px 28px rgba(213,16,243,.25)}
+.ia-btn:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(213,16,243,.4)}
 
 /* HIGHLIGHTS */
-#highlights-section{margin-bottom:20px;display:none}
-.hl-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
-.hl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.hl-item{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:1;background:var(--surface);cursor:pointer}
-.hl-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
-.hl-item:hover img{transform:scale(1.06)}
-.hl-item .hl-over{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(7,5,15,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:10px;opacity:0;transition:opacity .3s}
+#hl-wrap{margin-top:4px;display:none}
+.hl-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;text-align:center}
+.hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.hl-item{border-radius:14px;overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid var(--border)}
+.hl-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.hl-item:hover img{transform:scale(1.07)}
+.hl-item .hl-over{position:absolute;inset:0;background:linear-gradient(transparent 40%,rgba(5,5,8,.88));display:flex;flex-direction:column;justify-content:flex-end;padding:10px;opacity:0;transition:opacity .3s}
 .hl-item:hover .hl-over{opacity:1}
-.hl-item .hl-title{font-size:11px;font-weight:700;color:var(--w);line-height:1.3}
-.hl-item .hl-tag{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-top:2px}
+.hl-name{font-size:11px;font-weight:700;color:var(--w)}
+.hl-tag{font-family:'DM Mono',monospace;font-size:8px;color:var(--dim);text-transform:uppercase;margin-top:2px}
 
-/* IA LAB PAGE */
-#ia-view,#zodiac-view{display:none;min-height:100vh}
-.back-btn{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--dim);background:none;border:none;cursor:pointer;transition:color .2s;margin-bottom:24px;padding:0}
-.back-btn:hover{color:var(--w)}
-.page-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;margin-bottom:20px}
-.page-title span{background:linear-gradient(135deg,var(--p),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+/* ── IA LAB ── */
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:8px 14px;border-radius:8px;cursor:pointer;transition:all .2s;margin-bottom:20px}
+.back-btn:hover{color:var(--w);border-color:rgba(255,255,255,.2)}
+.page-heading{font-family:'Bebas Neue',cursive;font-size:36px;letter-spacing:.06em;margin-bottom:4px}
+.page-heading span{background:linear-gradient(135deg,var(--p),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.page-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim);text-transform:uppercase;margin-bottom:20px}
 
-/* PROMPT CARDS */
-.how-to{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.15);border-radius:12px;padding:14px 16px;margin-bottom:20px}
-.how-to h3{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(147,197,253,.7);margin-bottom:10px}
-.how-to ol{list-style:none;display:flex;flex-direction:column;gap:6px}
-.how-to li{font-size:11px;color:rgba(240,232,255,.5);line-height:1.6;counter-increment:steps;display:flex;gap:8px}
-.how-to li::before{content:counter(steps);font-family:'DM Mono',monospace;font-size:9px;color:var(--b);flex-shrink:0;margin-top:2px}
-.how-to{counter-reset:steps}
+.howto{background:rgba(59,130,246,.07);border:1px solid rgba(59,130,246,.14);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.howto h3{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(147,197,253,.6);margin-bottom:10px}
+.howto ol{counter-reset:s;list-style:none;display:flex;flex-direction:column;gap:6px}
+.howto li{font-size:11px;color:rgba(240,232,255,.45);line-height:1.6;display:flex;gap:8px;counter-increment:s}
+.howto li::before{content:counter(s);font-family:'DM Mono',monospace;font-size:9px;color:var(--b);flex-shrink:0;margin-top:2px}
 
-.pcat-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;border-radius:12px;font-family:'Syne',sans-serif;font-size:14px;font-weight:800;letter-spacing:.02em;border:none;cursor:pointer;transition:all .3s;margin-bottom:20px;text-decoration:none}
-.zodiac-btn{background:linear-gradient(135deg,#92400e,#d97706,#92400e);background-size:200%;animation:goldShift 3s linear infinite;color:#000;box-shadow:0 4px 20px rgba(217,119,6,.3)}
+.zodiac-btn{width:100%;padding:14px;border-radius:13px;background:linear-gradient(135deg,#78350f,#d97706,#78350f);background-size:200%;animation:goldShift 3s linear infinite;color:#000;font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:.06em;border:none;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;box-shadow:0 4px 20px rgba(217,119,6,.25)}
+.zodiac-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(217,119,6,.4)}
 @keyframes goldShift{0%{background-position:0%}100%{background-position:200%}}
-.zodiac-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(217,119,6,.45)}
 
-.prompt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.pcard{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px;transition:border-color .3s}
-.pcard:hover{border-color:rgba(192,38,211,.3)}
-.pcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px;cursor:pointer}
-.pcard-desc{font-size:9px;color:rgba(240,232,255,.3);line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-style:italic}
-.copy-btn{width:100%;padding:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:rgba(240,232,255,.5);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
-.copy-btn:hover{background:rgba(192,38,211,.15);border-color:rgba(192,38,211,.4);color:var(--w)}
-.copy-btn.copied{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:rgba(34,197,94,.8)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:10px;transition:border-color .3s}
+.pcard:hover{border-color:rgba(213,16,243,.3)}
+.pcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;display:block;margin-bottom:8px;cursor:pointer;transition:transform .4s}
+.pcard:hover img{transform:scale(1.02)}
+.pcard-desc{font-size:9px;color:rgba(240,232,255,.28);line-height:1.5;margin-bottom:8px;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cpbtn{width:100%;padding:7px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:rgba(240,232,255,.4);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:7px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:5px}
+.cpbtn:hover{background:rgba(213,16,243,.12);border-color:rgba(213,16,243,.35);color:var(--w)}
+.cpbtn.copied{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:rgba(134,239,172,.8)}
 
-/* ZODIAC */
-.zodiac-header{text-align:center;margin-bottom:24px}
-.zodiac-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#d97706}
-.zodiac-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(217,119,6,.5);text-transform:uppercase;margin-top:4px}
-.zcard{background:rgba(146,64,14,.06);border:1px solid rgba(146,64,14,.2);border-radius:12px;padding:10px;transition:border-color .3s}
-.zcard:hover{border-color:rgba(217,119,6,.4)}
-.zcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;margin-bottom:8px;cursor:pointer}
-.zcard-name{font-size:10px;font-weight:700;color:#d97706;margin-bottom:6px}
-.zcopy{width:100%;padding:7px;background:rgba(146,64,14,.15);border:1px solid rgba(146,64,14,.3);color:#d97706;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:6px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:6px}
-.zcopy:hover{background:rgba(217,119,6,.25);border-color:#d97706}
-.zcopy.copied{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:rgba(34,197,94,.8)}
+/* ── ZODÍACO ── */
+.z-header{text-align:center;margin-bottom:20px}
+.z-title{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:.06em;color:#d97706}
+.z-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(217,119,6,.4);text-transform:uppercase;margin-top:2px}
+.zcard{background:rgba(120,53,15,.07);border:1px solid rgba(120,53,15,.2);border-radius:14px;padding:10px;transition:border-color .3s}
+.zcard:hover{border-color:rgba(217,119,6,.35)}
+.zcard img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:9px;display:block;margin-bottom:8px;cursor:pointer;transition:transform .4s}
+.zcard:hover img{transform:scale(1.02)}
+.zcard-name{font-size:10px;font-weight:700;color:#d97706;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase}
+.zcpbtn{width:100%;padding:7px;background:rgba(120,53,15,.15);border:1px solid rgba(120,53,15,.3);color:#d97706;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:7px;cursor:pointer;transition:all .25s;display:flex;align-items:center;justify-content:center;gap:5px}
+.zcpbtn:hover{background:rgba(217,119,6,.2);border-color:#d97706}
+.zcpbtn.copied{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:rgba(134,239,172,.8)}
+.z-quote{text-align:center;margin-top:20px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(217,119,6,.3);letter-spacing:.1em;font-style:italic}
 
 /* TOAST */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:linear-gradient(135deg,var(--p),var(--g));color:#fff;padding:10px 24px;border-radius:50px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;z-index:9999;opacity:0;transition:all .4s;pointer-events:none;white-space:nowrap}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(16px);background:linear-gradient(135deg,var(--p),var(--g));color:#fff;padding:10px 22px;border-radius:30px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;z-index:9999;opacity:0;transition:all .35s;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(213,16,243,.35)}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-/* IMAGE VIEWER */
-#img-modal{position:fixed;inset:0;background:rgba(7,5,15,.95);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(12px)}
-#img-modal.open{display:flex}
-#img-modal img{max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain}
-#img-modal-close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--dim);font-size:24px;cursor:pointer;transition:color .2s;font-family:'DM Mono',monospace}
-#img-modal-close:hover{color:var(--w)}
+/* IMG VIEWER */
+#imgview{position:fixed;inset:0;background:rgba(5,5,8,.96);z-index:9990;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(16px)}
+#imgview.open{display:flex}
+#imgview img{max-width:100%;max-height:88vh;border-radius:12px;object-fit:contain;box-shadow:0 0 60px rgba(213,16,243,.15)}
+#imgview-close{position:absolute;top:18px;right:20px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--dim);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;padding:6px 12px;border-radius:6px;cursor:pointer;transition:color .2s}
+#imgview-close:hover{color:var(--w)}
 
-.footer-txt{text-align:center;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:rgba(240,232,255,.15);text-transform:uppercase;margin-top:32px}
+.ft{text-align:center;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:rgba(240,232,255,.12);text-transform:uppercase;margin-top:28px}
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
+<canvas id="bg-canvas"></canvas>
 <div id="toast">Copiado!</div>
-<div id="img-modal" onclick="closeImg()">
-  <button id="img-modal-close" onclick="closeImg()">✕</button>
-  <img id="img-modal-src" src="" alt="" onclick="event.stopPropagation()">
+<div id="imgview" onclick="closeImg()">
+  <button id="imgview-close" onclick="closeImg()">✕ fechar</button>
+  <img id="imgview-src" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
-<!-- ===== HOME ===== -->
-<div id="home-view" class="wrap">
+<!-- ═══ HOME ═══ -->
+<div class="view active" id="v-home">
+  <div class="inner">
+    <div id="banner-wrap"></div>
+    <div class="card">
+      <!-- PROFILE -->
+      <div class="profile">
+        <div class="av-wrap">
+          <div class="av-ring"></div>
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Marcelio" onclick="openImg(this.src)">
+        </div>
+        <div class="p-name">Marcelio Venancio</div>
+        <div class="p-bio">Explorando as fronteiras da IA e Criatividade.</div>
+      </div>
 
-  <!-- BANNER -->
-  <div id="banner-section"></div>
+      <!-- MÚSICA -->
+      <div id="music-wrap"></div>
 
-  <!-- PROFILE -->
-  <div class="profile">
-    <div class="avatar-wrap">
-      <div class="avatar-ring"></div>
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/Imagem%20do%20WhatsApp%20de%202025-09-16%20%C3%A0(s)%2014.43.37_9d2b94e7.jpg?raw=true" alt="Marcelio" onclick="openImg(this.src)">
+      <!-- LINKS -->
+      <div class="links">
+        <a href="https://marceliovenancio.vercel.app/" target="_blank" class="lbtn portfolio">
+          <span class="lbtn-icon">🚀</span> Portfólio & Website
+        </a>
+        <div class="grid2">
+          <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="lbtn">
+            <span class="lbtn-icon">📸</span> Instagram
+          </a>
+          <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="lbtn">
+            <span class="lbtn-icon">🎵</span> TikTok
+          </a>
+        </div>
+        <a href="https://discord.gg/bzN88hAq" target="_blank" class="lbtn">
+          <span class="lbtn-icon">🎮</span> Discord — GoguenLounge
+        </a>
+        <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="lbtn">
+          <span class="lbtn-icon">▶️</span> YouTube
+        </a>
+        <a href="https://open.spotify.com/artist/4ASKzkcV8oXC1lVFByJwYD" target="_blank" class="lbtn">
+          <span class="lbtn-icon">🎧</span> Spotify
+        </a>
+        <button class="ia-btn" onclick="go('v-ia')">🧠 IA LAB — Ver Prompts</button>
+      </div>
+
+      <!-- HIGHLIGHTS -->
+      <div id="hl-wrap">
+        <div class="hl-label">Destaques</div>
+        <div class="hl-grid" id="hl-grid"></div>
+      </div>
     </div>
-    <div class="p-name">Marcelio Venancio</div>
-    <div class="p-bio">Explorando as fronteiras da IA e Criatividade.</div>
+    <div class="ft">© Marcelio Venancio</div>
   </div>
-
-  <!-- MÚSICA -->
-  <div id="music-section"></div>
-
-  <!-- LINKS -->
-  <div class="links-section">
-    <a href="https://marceliovenancio.vercel.app/" target="_blank" class="lbtn l-portfolio">
-      <span class="icon">🚀</span> Portfólio & Website <span class="arr">→</span>
-    </a>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <a href="https://www.instagram.com/marcelio_venancio/" target="_blank" class="lbtn l-ig" style="font-size:13px;padding:12px 14px">
-        <span class="icon">📸</span> Instagram <span class="arr">→</span>
-      </a>
-      <a href="https://www.tiktok.com/@goguenblouts" target="_blank" class="lbtn l-tt" style="font-size:13px;padding:12px 14px">
-        <span class="icon">🎵</span> TikTok <span class="arr">→</span>
-      </a>
-    </div>
-    <a href="https://discord.gg/bzN88hAq" target="_blank" class="lbtn l-dc">
-      <span class="icon">🎮</span> Discord — GoguenLounge <span class="arr">→</span>
-    </a>
-    <a href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" class="lbtn l-yt">
-      <span class="icon">▶️</span> YouTube <span class="arr">→</span>
-    </a>
-    <a href="https://open.spotify.com/artist/4ASKzkcV8oXC1lVFByJwYD" target="_blank" class="lbtn l-sp">
-      <span class="icon">🎧</span> Spotify <span class="arr">→</span>
-    </a>
-    <button class="ia-btn" onclick="goTo('ia-view')">
-      🧠 IA LAB — Ver Prompts
-    </button>
-  </div>
-
-  <!-- HIGHLIGHTS -->
-  <div id="highlights-section">
-    <div class="hl-label">Destaques</div>
-    <div class="hl-grid" id="hl-grid"></div>
-  </div>
-
-  <div class="footer-txt">© Marcelio Venancio</div>
 </div>
 
-<!-- ===== IA LAB ===== -->
-<div id="ia-view" class="wrap">
-  <button class="back-btn" onclick="goTo('home-view')">← Voltar</button>
-  <div class="page-title">IA LAB <span>Prompts</span></div>
-
-  <div class="how-to">
-    <h3>Como usar</h3>
-    <ol>
-      <li>Escolha uma imagem que curtiu</li>
-      <li>Clique em Copiar Prompt</li>
-      <li>Abra ChatGPT, Midjourney ou similar</li>
-      <li>Use sua foto + o prompt para gerar sua versão</li>
-    </ol>
-  </div>
-
-  <button class="pcat-btn zodiac-btn" onclick="goTo('zodiac-view')">
-    ⚡ Cavaleiros do Zodíaco — Prompts
-  </button>
-
-  <div class="prompt-grid" id="prompts-grid">
-    <!-- cards dinâmicos + estáticos -->
-    <div class="pcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="pcard-desc">Traje de Qin Shi Huang — Record of Ragnarok</div>
-      <button class="copy-btn" onclick="cp('Crie uma imagem minha usando o traje de Qin Shi Huang do anime Record of Ragnarok, com armadura imperial chinesa detalhada, dragões dourados na armadura, fundo dramático com cores imperiais vermelhas e douradas, iluminação cinematográfica, realismo extremo, 8K.',this)">
-        <span>⧉</span> Copiar Prompt
-      </button>
+<!-- ═══ IA LAB ═══ -->
+<div class="view" id="v-ia">
+  <div class="inner">
+    <button class="back-btn" onclick="go('v-home')">← Voltar</button>
+    <div class="page-heading">IA <span>Lab</span></div>
+    <div class="page-sub">Prompts de inteligência artificial</div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="howto">
+        <h3>Como usar</h3>
+        <ol>
+          <li>Escolha uma imagem que curtiu</li>
+          <li>Clique em Copiar Prompt</li>
+          <li>Abra ChatGPT, Midjourney ou similar</li>
+          <li>Use sua foto + o prompt para gerar sua versão</li>
+        </ol>
+      </div>
+      <button class="zodiac-btn" onclick="go('v-zodiac')">⚡ Cavaleiros do Zodíaco</button>
+      <div class="pgrid" id="pgrid">
+        <div class="pcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/QIN%20SHI%20HUANG.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="pcard-desc">Qin Shi Huang — Record of Ragnarok</div>
+          <button class="cpbtn" onclick="cp('Crie uma imagem minha usando o traje de Qin Shi Huang do anime Record of Ragnarok, com armadura imperial chinesa detalhada, dragões dourados na armadura, fundo dramático com cores imperiais vermelhas e douradas, iluminação cinematográfica, realismo extremo, 8K.',this)">⧉ Copiar Prompt</button>
+        </div>
+        <div class="pcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="pcard-desc">Columbina — Genshin Impact</div>
+          <button class="cpbtn" onclick="cp('Create an image of me wearing Columbina\'s costume from Genshin Impact, with the Harbinger\'s red and black outfit, pale skin, eerie smile, dramatic lighting, hyperrealistic, 8K render.',this)">⧉ Copiar Prompt</button>
+        </div>
+      </div>
     </div>
-    <div class="pcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/COLUMBINA'S.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="pcard-desc">Columbina — Genshin Impact</div>
-      <button class="copy-btn" onclick="cp('Create an image of me wearing Columbina\'s costume from Genshin Impact, with the Harbinger\'s red and black outfit, pale skin, eerie smile, dramatic lighting, hyperrealistic, 8K render.',this)">
-        <span>⧉</span> Copiar Prompt
-      </button>
-    </div>
+    <div class="ft">© Marcelio Venancio</div>
   </div>
-
-  <div class="footer-txt" style="margin-top:24px">© Marcelio Venancio</div>
 </div>
 
-<!-- ===== ZODÍACO ===== -->
-<div id="zodiac-view" class="wrap">
-  <button class="back-btn" onclick="goTo('ia-view')" style="color:rgba(217,119,6,.6)">← Voltar</button>
-  <div class="zodiac-header">
-    <div class="zodiac-title">⚡ Santuário de Prompts</div>
-    <div class="zodiac-sub">Cavaleiros do Zodíaco</div>
+<!-- ═══ ZODÍACO ═══ -->
+<div class="view" id="v-zodiac">
+  <div class="inner">
+    <button class="back-btn" onclick="go('v-ia')" style="border-color:rgba(120,53,15,.3);color:rgba(217,119,6,.5)">← Voltar</button>
+    <div class="z-header">
+      <div class="z-title">⚡ Santuário de Prompts</div>
+      <div class="z-sub">Cavaleiros do Zodíaco</div>
+    </div>
+    <div class="card">
+      <div class="pgrid">
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Seiya — Sagitário Ouro</div>
+          <button class="zcpbtn" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. Fidelidade facial absoluta. Pose ereta e confiante. Câmera low angle. Iluminação cinematográfica intensa com alto contraste. Fundo dourado luminoso com aura cósmica intensa.',this)">⚡ Copiar</button>
+        </div>
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEYIA%20DE%20PEGASUS.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Seiya — Pégasus</div>
+          <button class="zcpbtn" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Pégasus, do anime Saint Seiya, vestindo a Armadura de Bronze de Pégasus, branco-prateada com detalhes vermelhos, capacete com chifres curvos. Fidelidade facial absoluta. Braço elevado em ataque. Câmera low angle. Fundo azul cósmico com explosões de energia.',this)">⚡ Copiar</button>
+        </div>
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Shiryu — Dragão</div>
+          <button class="zcpbtn" onclick="cp('Create an image of me as Shiryu of the Dragon from Saint Seiya, wearing the full Dragon Bronze Cloth with green-teal armor, dragon-themed helmet. Arm raised, torso slightly turned. Low angle cinematic lighting. Background deep emerald green with cosmic energy. Preserve my exact facial structure. Hyperrealistic, 8K.',this)">⚡ Copiar</button>
+        </div>
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/HYOGA%20DE%20CISNE.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Hyoga — Cisne</div>
+          <button class="zcpbtn" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Hyoga de Cisne, do anime Saint Seiya, vestindo a Armadura de Bronze de Cisne, tons azul-gelo e prata, capacete com asas. Fidelidade facial absoluta. Braço estendido apontando. Câmera low angle. Fundo azul glacial com cristais de gelo e energia azul-clara.',this)">⚡ Copiar</button>
+        </div>
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHUN%20DE%20ANDROMEDA.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Shun — Andrômeda</div>
+          <button class="zcpbtn" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Shun de Andrômeda do anime Saint Seiya, armadura rosa-magenta com detalhes verde-esmeralda, capacete com chifres longos, correntes de Andrômeda em primeiro plano. Fidelidade facial absoluta. Câmera low angle. Fundo rosa profundo com tons violeta.',this)">⚡ Copiar</button>
+        </div>
+        <div class="zcard">
+          <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IKKI%20DE%20FENIX.png?raw=true" alt="" onclick="openImg(this.src)">
+          <div class="zcard-name">Ikki — Fênix</div>
+          <button class="zcpbtn" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Ikki de Fênix do anime Saint Seiya, armadura azul-profundo com detalhes laranja-dourados, chifres longos. Pose firme, corpo ereto, punhos cerrados. Câmera low angle. Fundo azul-escuro com tons vermelho-incandescente e partículas flamejantes.',this)">⚡ Copiar</button>
+        </div>
+      </div>
+      <div class="z-quote">"Faça elevar o Cosmo no seu coração!"</div>
+    </div>
+    <div class="ft">© Marcelio Venancio</div>
   </div>
-  <div class="prompt-grid" id="zodiac-grid">
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEIYA%20DE%20SARGITARIO.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Seiya — Sagitário Ouro</div>
-      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Sagitário, do anime Saint Seiya (Cavaleiros do Zodíaco), vestindo a Armadura de Ouro de Sagitário completa, 100% fiel ao design original do anime clássico, com armadura dourada intensa, reflexos quentes em ouro polido, capacete com asas laterais características de Sagitário, peitoral detalhado, ombreiras largas e manoplas ornamentadas. Fidelidade facial absoluta: Preservar exatamente minha estrutura facial original da foto de referência. A pose deve ser idêntica à imagem de referência, com postura ereta e confiante. Câmera em ângulo low angle apontada para cima. Iluminação cinematográfica intensa com alto contraste, fundo dourado luminoso com aura cósmica intensa.',this)">⚡ Copiar</button>
-    </div>
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SEYIA%20DE%20PEGASUS.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Seiya — Pégasus</div>
-      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Seiya de Pégasus, do anime Saint Seiya, vestindo a Armadura de Bronze de Pégasus completa, armadura branco-prateada com detalhes vermelhos, capacete com chifres curvos dourados. Fidelidade facial absoluta à referência. Pose com braço elevado em posição de ataque, tronco levemente girado. Câmera low angle. Iluminação cinematográfica, fundo azul cósmico com explosões de energia e partículas estelares.',this)">⚡ Copiar</button>
-    </div>
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHIRYU%20DO%20DRAG%C3%83O.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Shiryu — Dragão</div>
-      <button class="zcopy" onclick="cp('Create an image of me as Shiryu of the Dragon from Saint Seiya, wearing the full Dragon Bronze Cloth, faithful to the original design with green-teal armor, dragon-themed helmet. Pose exactly like the reference image, arm raised, torso slightly turned. Intense cinematic lighting from a low angle. Background deep emerald green with cosmic energy. Preserve my exact facial structure from the reference photo. Hyperrealistic, 8K.',this)">⚡ Copiar</button>
-    </div>
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/HYOGA%20DE%20CISNE.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Hyoga — Cisne</div>
-      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Hyoga de Cisne, do anime Saint Seiya, vestindo a Armadura de Bronze de Cisne completa, tons azul-gelo, prata e branco, capacete com asas laterais. Fidelidade facial absoluta. Pose com braço estendido apontando, tronco levemente girado. Câmera low angle. Iluminação cinematográfica. Fundo azul glacial com cristais de gelo, névoa fria e energia azul-clara.',this)">⚡ Copiar</button>
-    </div>
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/SHUN%20DE%20ANDROMEDA.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Shun — Andrômeda</div>
-      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Shun de Andrômeda do anime Saint Seiya, vestindo a Armadura de Bronze de Andrômeda, tons rosa-magenta com detalhes verde-esmeralda, capacete com chifres longos. Fidelidade facial absoluta. Pose com braço estendido em gesto defensivo e outro braço puxando a corrente de Andrômeda. Câmera low angle. Fundo rosa profundo com tons violeta e partículas etéreas.',this)">⚡ Copiar</button>
-    </div>
-    <div class="zcard">
-      <img src="https://github.com/Goguenblouts/MeusLinks/blob/main/FOTO%20DE%20IA/IKKI%20DE%20FENIX.png?raw=true" alt="" onclick="openImg(this.src)">
-      <div class="zcard-name">Ikki — Fênix</div>
-      <button class="zcopy" onclick="cp('Crie uma imagem ultrarrealista em 8K de mim como Ikki de Fênix do anime Saint Seiya, vestindo a Armadura de Bronze da Fênix, azul-profundo metálico com detalhes laranja-dourados no elmo, chifres longos. Fidelidade facial absoluta. Pose firme e imponente, corpo ereto, punhos cerrados. Câmera low angle. Fundo azul-escuro com tons vermelho-incandescente e partículas flamejantes.',this)">⚡ Copiar</button>
-    </div>
-  </div>
-  <p style="text-align:center;margin-top:20px;font-family:'DM Mono',monospace;font-size:9px;color:rgba(217,119,6,.35);letter-spacing:.1em">"Faça elevar o Cosmo no seu coração!"</p>
-  <div class="footer-txt">© Marcelio Venancio</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-const OWNER='goguenblouts', REPO='MeusLinks', RAW=`https://raw.githubusercontent.com/${OWNER}/${REPO}/main`;
-
-/* BG THREE.JS */
+/* THREE BG */
 (function(){
-  const canvas=document.getElementById('bg');
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  const cv=document.getElementById('bg-canvas');
+  const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   const W=()=>innerWidth,H=()=>innerHeight;
   renderer.setSize(W(),H());
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(75,W()/H(),.1,100);
+  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(75,W()/H(),.1,100);
   camera.position.z=5;
+  const n=1600,pos=new Float32Array(n*3);
+  for(let i=0;i<n*3;i++)pos[i]=(Math.random()-.5)*14;
   const geo=new THREE.BufferGeometry();
-  const n=1800,pos=new Float32Array(n*3);
-  for(let i=0;i<n*3;i++)pos[i]=(Math.random()-.5)*16;
   geo.setAttribute('position',new THREE.BufferAttribute(pos,3));
-  const p1=new THREE.Points(geo,new THREE.PointsMaterial({color:0xd510f3,size:.022,transparent:true,opacity:.65,blending:THREE.AdditiveBlending}));
-  const p2=new THREE.Points(geo.clone(),new THREE.PointsMaterial({color:0x3b82f6,size:.015,transparent:true,opacity:.4,blending:THREE.AdditiveBlending}));
+  const p1=new THREE.Points(geo,new THREE.PointsMaterial({color:0xd510f3,size:.024,transparent:true,opacity:.6,blending:THREE.AdditiveBlending}));
+  const p2=new THREE.Points(geo.clone(),new THREE.PointsMaterial({color:0x3b82f6,size:.016,transparent:true,opacity:.35,blending:THREE.AdditiveBlending}));
   p2.rotation.y=Math.PI;
   scene.add(p1,p2);
   let mx=0,my=0;
   document.addEventListener('mousemove',e=>{mx=(e.clientX/W()-.5)*2;my=(e.clientY/H()-.5)*2;});
+  document.addEventListener('touchmove',e=>{const t=e.touches[0];mx=(t.clientX/W()-.5)*2;my=(t.clientY/H()-.5)*2;},{passive:true});
   window.addEventListener('resize',()=>{renderer.setSize(W(),H());camera.aspect=W()/H();camera.updateProjectionMatrix();});
-  (function a(){requestAnimationFrame(a);p1.rotation.y+=.001;scene.rotation.y+=(mx*.08-scene.rotation.y)*.05;scene.rotation.x+=(my*.06-scene.rotation.x)*.05;renderer.render(scene,camera);})();
+  (function a(){requestAnimationFrame(a);p1.rotation.y+=.0012;scene.rotation.y+=(mx*.07-scene.rotation.y)*.04;scene.rotation.x+=(my*.05-scene.rotation.x)*.04;renderer.render(scene,camera);})();
 })();
 
 /* NAV */
-function goTo(id){
-  ['home-view','ia-view','zodiac-view'].forEach(v=>document.getElementById(v).style.display='none');
-  document.getElementById(id).style.display='block';
+function go(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
-goTo('home-view');
 
-/* TOAST + COPY */
+/* COPY */
 function cp(text,btn){
-  navigator.clipboard.writeText(text).catch(()=>{
-    const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
-  });
+  navigator.clipboard.writeText(text).catch(()=>{const t=document.createElement('textarea');t.value=text;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);});
   const orig=btn.innerHTML;
-  btn.innerHTML='✓ Copiado!';
-  btn.classList.add('copied');
+  btn.innerHTML='✓ Copiado!';btn.classList.add('copied');
   setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied');},2200);
   const toast=document.getElementById('toast');
-  toast.classList.add('show');
-  clearTimeout(toast._t);
-  toast._t=setTimeout(()=>toast.classList.remove('show'),2500);
+  toast.classList.add('show');clearTimeout(toast._t);
+  toast._t=setTimeout(()=>toast.classList.remove('show'),2400);
 }
 
-/* IMAGE VIEWER */
-function openImg(src){
-  document.getElementById('img-modal-src').src=src;
-  document.getElementById('img-modal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeImg(){
-  document.getElementById('img-modal').classList.remove('open');
-  document.body.style.overflow='';
-}
+/* IMG VIEWER */
+function openImg(src){document.getElementById('imgview-src').src=src;document.getElementById('imgview').classList.add('open');document.body.style.overflow='hidden';}
+function closeImg(){document.getElementById('imgview').classList.remove('open');document.body.style.overflow='';}
 
-/* LOAD DYNAMIC DATA */
+/* LOAD DYNAMIC */
 async function loadData(){
   try{
-    const r=await fetch(`${RAW}/links_data.json?t=${Date.now()}`);
+    const r=await fetch(`https://raw.githubusercontent.com/goguenblouts/MeusLinks/main/links_data.json?t=${Date.now()}`);
     if(!r.ok)return;
     const d=await r.json();
 
     // BANNERS
     if(d.banners&&d.banners.length){
-      const sec=document.getElementById('banner-section');
-      sec.style.display='block';
-      let html='';
+      const wrap=document.getElementById('banner-wrap');
+      wrap.style.display='block';
+      let html='<div style="position:relative;border-radius:20px;overflow:hidden">';
       d.banners.forEach((b,i)=>{
-        html+=`<div class="banner-slide${i===0?' active':''}" style="min-height:${b.img?'160px':'80px'}">
-          ${b.img?`<img src="${b.img}" alt="">`:''}
-          <div class="b-text">
+        html+=`<div class="b-slide${i===0?' on':''}" id="bslide${i}">
+          ${b.img?`<img src="${b.img}" style="width:100%;height:160px;object-fit:cover;display:block;border-radius:18px" alt="">`:'<div style="height:80px;background:rgba(213,16,243,.08);border-radius:18px"></div>'}
+          <div class="b-overlay">
             <div class="b-title">${b.title||''}</div>
             ${b.sub?`<div class="b-sub">${b.sub}</div>`:''}
             ${b.link?`<a href="${b.link}" target="_blank" class="b-cta">${b.cta||'Ver mais'}</a>`:''}
           </div>
         </div>`;
       });
-      if(d.banners.length>1){
-        html+=`<div class="banner-dots">${d.banners.map((_,i)=>`<span class="${i===0?'on':''}"></span>`).join('')}</div>`;
-      }
-      sec.innerHTML=html;
+      html+='</div>';
+      if(d.banners.length>1){html+=`<div class="b-dots">${d.banners.map((_,i)=>`<div class="b-dot${i===0?' on':''}" id="bdot${i}"></div>`).join('')}</div>`;}
+      wrap.innerHTML=html;
       if(d.banners.length>1){
         let ci=0;
-        const slides=sec.querySelectorAll('.banner-slide'),dots=sec.querySelectorAll('.banner-dots span');
         setInterval(()=>{
-          slides[ci].classList.remove('active');dots[ci].classList.remove('on');
-          ci=(ci+1)%slides.length;
-          slides[ci].classList.add('active');dots[ci].classList.add('on');
+          document.getElementById('bslide'+ci).classList.remove('on');
+          document.getElementById('bdot'+ci).classList.remove('on');
+          ci=(ci+1)%d.banners.length;
+          document.getElementById('bslide'+ci).classList.add('on');
+          document.getElementById('bdot'+ci).classList.add('on');
         },4000);
       }
     }
 
     // MÚSICA
     if(d.music&&d.music.title){
-      const sec=document.getElementById('music-section');
-      sec.style.display='block';
-      const m=d.music;
-      const platIcons={spotify:'<svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',youtube:'<svg viewBox="0 0 24 24"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>'};
-      sec.innerHTML=`<a href="${m.link||'#'}" target="_blank" class="music-card">
+      const m=d.music,wrap=document.getElementById('music-wrap');
+      wrap.style.display='block';
+      wrap.innerHTML=`<a href="${m.link||'#'}" target="_blank" class="music-card">
         ${m.thumb?`<img class="music-thumb" src="${m.thumb}" alt="">`:'<div class="music-thumb"></div>'}
         <div class="music-info">
           <div class="music-title">${m.title}</div>
           <div class="music-artist">${m.artist||''}</div>
           <div class="music-plat">${m.platform||''}</div>
         </div>
-        <div class="music-icon">${m.platform&&platIcons[m.platform.toLowerCase()]?platIcons[m.platform.toLowerCase()]:''}
-          <div class="bars"><span></span><span></span><span></span><span></span></div>
-        </div>
+        <div class="bars"><span></span><span></span><span></span><span></span></div>
       </a>`;
     }
 
     // HIGHLIGHTS
     if(d.highlights&&d.highlights.length){
-      const sec=document.getElementById('highlights-section'),grid=document.getElementById('hl-grid');
-      sec.style.display='block';
+      const wrap=document.getElementById('hl-wrap'),grid=document.getElementById('hl-grid');
+      wrap.style.display='block';
       grid.innerHTML=d.highlights.map(h=>`
-        <div class="hl-item" onclick="${h.link?`window.open('${h.link}','_blank')`:`openImg('${h.img}')`}">
+        <div class="hl-item" onclick="${h.link?`window.open('${h.link}','_blank')`:`openImg('${h.img||''}')`}">
           ${h.img?`<img src="${h.img}" alt="">`:''}
           <div class="hl-over">
-            <div class="hl-title">${h.title||''}</div>
+            <div class="hl-name">${h.title||''}</div>
             ${h.tag?`<div class="hl-tag">${h.tag}</div>`:''}
           </div>
         </div>`).join('');
@@ -442,18 +421,16 @@ async function loadData(){
 
     // PROMPTS EXTRAS
     if(d.prompts&&d.prompts.length){
-      const grid=document.getElementById('prompts-grid');
+      const grid=document.getElementById('pgrid');
       d.prompts.forEach(p=>{
-        const div=document.createElement('div');
-        div.className='pcard';
-        div.innerHTML=`
-          ${p.img?`<img src="${p.img}" alt="" onclick="openImg(this.src)">`:''}
+        const div=document.createElement('div');div.className='pcard';
+        div.innerHTML=`${p.img?`<img src="${p.img}" alt="" onclick="openImg(this.src)">`:''}
           <div class="pcard-desc">${p.desc||''}</div>
-          <button class="copy-btn" onclick="cp(\`${(p.prompt||'').replace(/`/g,'\\`')}\`,this)"><span>⧉</span> Copiar Prompt</button>`;
+          <button class="cpbtn" onclick="cp(\`${(p.prompt||'').replace(/`/g,'\\`')}\`,this)">⧉ Copiar Prompt</button>`;
         grid.appendChild(div);
       });
     }
-  } catch(e){console.log('Sem dados dinâmicos ainda')}
+  }catch(e){}
 }
 loadData();
 </script>
