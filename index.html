@@ -27,13 +27,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
 .view.on{display:block}
 .wrap{max-width:430px;margin:0 auto;padding:0 16px}
 
-/* HERO STRIP */
-.hero-strip{position:relative;overflow:hidden;height:220px;margin-bottom:0}
-#hero-canvas{position:absolute;inset:0;width:100%;height:100%}
-.hero-content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:24px 24px 20px}
-.hero-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(245,240,255,.35);margin-bottom:10px}
-.hero-name{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;line-height:.9;letter-spacing:-.02em}
-.hero-name em{font-style:italic;color:rgba(245,240,255,.35)}
+
 
 /* AVATAR + BIO */
 .profile-row{display:flex;align-items:center;gap:16px;padding:20px 20px 0;margin-bottom:20px}
@@ -444,37 +438,7 @@ body::after{content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opac
   (function a(){requestAnimationFrame(a);p1.rotation.y+=.001;sc.rotation.y+=(mx*.06-sc.rotation.y)*.04;sc.rotation.x+=(my*.04-sc.rotation.x)*.04;r.render(sc,cam);})();
 })();
 
-/* HERO GLSL SHADER */
-(function(){
-  const cv=document.getElementById('hero-canvas');
-  const gl=cv.getContext('webgl');
-  if(!gl)return;
-  const rz=()=>{cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;gl.viewport(0,0,cv.width,cv.height);};
-  rz();window.addEventListener('resize',rz);
-  const vs=`attribute vec2 a;varying vec2 v;void main(){v=a*.5+.5;gl_Position=vec4(a,0,1);}`;
-  const fs=`precision mediump float;varying vec2 v;uniform float t;uniform vec2 m;
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-float n(vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y);}
-float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*n(p);p*=2.1;a*=.5;}return v;}
-void main(){
-  vec2 uv=v+(m-.5)*.03;
-  float n1=fbm(uv*3.+t*.05);float n2=fbm(uv*5.-t*.04+n1);float c=fbm(uv*2.+n2+t*.02);
-  vec3 col=mix(vec3(.04,.02,.08),mix(vec3(.12,.04,.18),vec3(.06,.08,.22),c),n1*n2*.8);
-  col*=smoothstep(.95,.25,length(v-.5)*1.8)*.6+.4;
-  gl_FragColor=vec4(col,1.);
-}`;
-  function mk(type,src){const s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);return s;}
-  const pg=gl.createProgram();
-  gl.attachShader(pg,mk(gl.VERTEX_SHADER,vs));gl.attachShader(pg,mk(gl.FRAGMENT_SHADER,fs));
-  gl.linkProgram(pg);gl.useProgram(pg);
-  const buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);
-  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
-  const al=gl.getAttribLocation(pg,'a');gl.enableVertexAttribArray(al);gl.vertexAttribPointer(al,2,gl.FLOAT,false,0,0);
-  const tl=gl.getUniformLocation(pg,'t'),ml=gl.getUniformLocation(pg,'m');
-  let mx=.5,my=.5,smx=.5,smy=.5;
-  document.addEventListener('mousemove',e=>{mx=e.clientX/innerWidth;my=e.clientY/innerHeight;});
-  let tf=0;
-  (function fr(){requestAnimationFrame(fr);tf+=.4;smx+=(mx-smx)*.04;smy+=(my-smy)*.04;gl.uniform1f(tl,tf);gl.uniform2f(ml,smx,smy);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);})();
+
 })();
 
 /* NAV */
