@@ -9,16 +9,16 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
 :root{
-  --bg:#0a0a0a;
-  --surface:#111111;
-  --border:#1e1e1e;
-  --border-hover:#333;
-  --text:#f0f0f0;
-  --muted:#555;
-  --muted2:#333;
+  --bg:#ffffff;
+  --surface:#f5f5f5;
+  --border:#e0e0e0;
+  --border-hover:#bbb;
+  --text:#111111;
+  --muted:#888;
+  --muted2:#bbb;
   --purple:#9b59ff;
-  --purple-dim:rgba(155,89,255,.12);
-  --purple-glow:rgba(155,89,255,.25);
+  --purple-dim:rgba(155,89,255,.08);
+  --purple-glow:rgba(155,89,255,.2);
 }
 
 html,body{
@@ -29,18 +29,7 @@ html,body{
   overflow-x:hidden;
 }
 
-/* subtle grid texture */
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  z-index:0;
-  background-image:
-    linear-gradient(rgba(155,89,255,.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(155,89,255,.015) 1px, transparent 1px);
-  background-size:48px 48px;
-  pointer-events:none;
-}
+
 
 .page{
   position:relative;
@@ -129,58 +118,7 @@ body::before{
   border-radius:20px;
 }
 
-/* ── LIVE BADGE ── */
-.live-banner{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:var(--purple-dim);
-  border:1px solid var(--purple-glow);
-  border-radius:12px;
-  padding:14px 16px;
-  margin-bottom:32px;
-}
 
-.live-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--purple);
-  flex-shrink:0;
-  box-shadow:0 0 0 0 var(--purple-glow);
-  animation:pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(155,89,255,.4)}
-  50%{box-shadow:0 0 0 6px rgba(155,89,255,0)}
-}
-
-.live-info{
-  flex:1;
-}
-
-.live-label{
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  color:var(--purple);
-  margin-bottom:2px;
-}
-
-.live-time{
-  font-size:13px;
-  color:var(--text);
-  font-weight:500;
-}
-
-.live-cats{
-  font-size:10px;
-  color:var(--muted);
-  margin-top:2px;
-  letter-spacing:.04em;
-}
 
 /* ── SECTIONS ── */
 .section{
@@ -339,16 +277,6 @@ footer span{
       <span class="tag">Humor</span>
       <span class="tag">Arte</span>
       <span class="tag">Goiânia</span>
-    </div>
-  </div>
-
-  <!-- LIVE SCHEDULE -->
-  <div class="live-banner">
-    <div class="live-dot"></div>
-    <div class="live-info">
-      <div class="live-label">Live Schedule</div>
-      <div class="live-time">Todo dia às 20h</div>
-      <div class="live-cats">Gameplay · Resenha · Comunidade</div>
     </div>
   </div>
 
