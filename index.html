@@ -23,8 +23,11 @@
 html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--paper);font-family:var(--sans);min-height:100vh;overflow-x:hidden;cursor:crosshair;
   background-image:radial-gradient(900px 500px at 85% -10%,rgba(139,92,246,.22),transparent 60%),radial-gradient(700px 500px at -10% 40%,rgba(255,79,163,.12),transparent 60%);background-attachment:fixed}
-body.rgb{animation:hue 6s linear infinite}
-body.night{filter:saturate(.55) brightness(.82)}
+html{transition:filter .9s ease}
+html.rgb{animation:hue 6s linear infinite}
+/* modo madrugada: tudo cinza com tom azul */
+html.night{filter:grayscale(.85) sepia(.75) hue-rotate(172deg) saturate(1.15) brightness(.82) contrast(1.05)}
+html.night.rgb{animation:none}
 @keyframes hue{to{filter:hue-rotate(360deg)}}
 a,button{cursor:pointer;color:inherit}button{font:inherit}
 :focus-visible{outline:2px solid var(--pink);outline-offset:3px}
@@ -215,7 +218,7 @@ footer button.insonia{background:none;border:0;padding:0;font:inherit;letter-spa
   <div class="link-grid">
     <a class="link-card" href="https://open.spotify.com/artist/4ASKzkcV8oXC1lVFByJwYD" target="_blank" rel="noopener noreferrer"><svg class="brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg><span class="card-index">SOM NA VEIA</span><span class="card-name">Spotify</span><span class="card-sub">Dá o play. Sem algoritmo mandando.</span></a>
     <a class="link-card" href="https://www.youtube.com/@MarcelioVenancioTopic" target="_blank" rel="noopener noreferrer"><svg class="brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg><span class="card-index">ASSISTIR</span><span class="card-name">YouTube</span><span class="card-sub">Vídeos e música</span></a>
-    <a class="link-card wide primary-card" href="https://marceliovenancio.vercel.app/" target="_blank" rel="noopener noreferrer"><svg class="brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z"/></svg><span><span class="card-index">COISAS QUE EU FAÇO</span><span class="card-name">Portfólio</span></span><span class="card-sub">Design · IA · tecnologia</span></a>
+    <a class="link-card wide primary-card" href="https://marceliovenancio.vercel.app/" target="_blank" rel="noopener noreferrer"><svg class="brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z"/></svg><span><span class="card-index">COISAS QUE EU FAÇO</span><span class="card-name">Portfólio criativo</span></span><span class="card-sub">Design · IA · tecnologia</span></a>
   </div>
 </section>
 
@@ -290,13 +293,27 @@ function closeModal(){secret.classList.remove('open')}
 $('close').onclick=$('secret-ok').onclick=closeModal;
 secret.addEventListener('click',e=>{if(e.target===secret)closeModal()});
 
+/* áudio da tela final */
+const bicho=new Audio();bicho.preload='auto';
+const bichoSrcs=['bicho.mp3','https://www.myinstants.com/media/sounds/smzinhoobichoebommesmo.mp3'];let bsi=0,bichoReal=false;
+bicho.src=bichoSrcs[0];
+bicho.addEventListener('error',()=>{if(bsi<bichoSrcs.length-1){bicho.src=bichoSrcs[++bsi];bicho.load()}});
+function playBicho(){bichoReal=true;bicho.muted=false;bicho.currentTime=0;const p=bicho.play();if(p)p.catch(()=>{})}
+let bichoUnlocked=false;
+function unlockAudio(){ /* libera o áudio no primeiro toque (exigência do celular) */
+  if(bichoUnlocked)return;bichoUnlocked=true;
+  bicho.muted=true;const done=()=>{if(bichoReal)return;bicho.pause();bicho.currentTime=0;bicho.muted=false};
+  const p=bicho.play();if(p)p.then(done).catch(()=>{if(!bichoReal)bicho.muted=false});else done();
+}
+['pointerup','keydown'].forEach(ev=>addEventListener(ev,unlockAudio,{passive:true}));
+
 /* contador de ovos */
 function updateEggs(){$('eggs').textContent=`OVOS ✳ ${found.size}/${TOTAL}`}
 function discover(id){
   const isNew=!found.has(id);
   if(isNew){found.add(id);try{localStorage.setItem('gb-eggs',JSON.stringify([...found]))}catch(e){}}
   updateEggs();
-  if(isNew&&found.size===TOTAL){setTimeout(()=>{burst(70);openModal('Coleção completa.','Você achou todos os ovos. Isso não dá prêmio nenhum, só o direito de dizer que é curioso demais. Respeito.')},900)}
+  if(isNew&&found.size===TOTAL){playBicho();setTimeout(()=>{burst(70);openModal('Coleção completa.','Você achou todos os ovos. Isso não dá prêmio nenhum, só o direito de dizer que é curioso demais. Respeito.')},900)}
   return isNew;
 }
 updateEggs();
@@ -344,7 +361,7 @@ ticker.addEventListener('contextmenu',e=>e.preventDefault());
 
 /* 5 — RGB: tocar 3x em "ONLINE EM ALGUM LUGAR" (celular) ou digitar "rgb" (PC) */
 function toggleRgb(){
-  const on=document.body.classList.toggle('rgb');
+  const on=document.documentElement.classList.toggle('rgb');
   if(on){discover('rgb');say('MODO RGB LIGADO. igual o PC ✳',2600)}else say('RGB desligado. triste.',1800);
 }
 let sc=0,st;
@@ -362,8 +379,17 @@ document.addEventListener('keydown',e=>{
 
 /* 6 — insônia */
 $('insonia').onclick=()=>{
-  const on=document.body.classList.toggle('night');
-  if(on){discover('night');say('03:42 DA MANHÃ. VOCÊ TAMBÉM NÃO DORME?',2800)}else say('amanheceu.',1500);
+  const on=document.documentElement.classList.toggle('night');document.querySelector('meta[name=theme-color]').content=on?'#0a1020':'#0d0614';
+  if(on){
+    discover('night');
+    const d=new Date(),hr=d.getHours(),t=d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+    const msg=hr<5?`${t} DA MADRUGADA. VOCÊ TAMBÉM NÃO DORME?`
+      :hr<12?`${t}. INSÔNIA DE MANHÃ? BOM DIA MESMO ASSIM.`
+      :hr<18?`${t}. NEM É NOITE E O SITE JÁ FECHOU AS CORTINAS.`
+      :hr<23?`${t}. AINDA É CEDO PRA INSÔNIA, MAS TÁ VALENDO.`
+      :`${t}. QUASE MADRUGADA. FICA MAIS UM POUCO.`;
+    say(msg,3200);
+  }else say('amanheceu.',1500);
 };
 
 /* dicas */
