@@ -107,13 +107,14 @@ h1 .dot{background:var(--grad);-webkit-background-clip:text;background-clip:text
 .link-card.live:hover .card-index:before,.link-card.live .card-index:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pink);margin-right:7px;vertical-align:1px}
 .link-card.primary-card.live .card-index:before{background:#fff}
 .link-card.wide{grid-column:span 2;min-height:116px;flex-direction:row;align-items:end}
-.wide .card-name{margin-top:0}.wide .card-sub{margin-bottom:2px}
+.wide .card-name{margin-top:0;display:block;max-width:none}.wide .card-index{display:block;margin-bottom:10px}.wide .card-sub{margin-bottom:2px}
 .link-card .brand{position:absolute;right:-12px;bottom:-16px;width:118px;height:118px;fill:currentColor;opacity:.07;z-index:-1;transform:rotate(-10deg);transition:opacity .3s,transform .4s cubic-bezier(.3,1.3,.5,1);pointer-events:none}
 .link-card:hover .brand,.link-card:focus-visible .brand{opacity:.2;transform:rotate(0) scale(1.12)}
 .link-card.primary-card .brand{opacity:.16}.link-card.primary-card:hover .brand{opacity:.28}
 .link-card.wide .brand{width:132px;height:132px;right:8px;bottom:-24px}
 .link-card .copy{position:absolute;right:48px;top:14px;z-index:2;border:1px solid var(--line);background:rgba(13,6,20,.6);border-radius:99px;padding:4px 9px;font:9px var(--mono);color:var(--muted);transition:.2s}
 .link-card .copy:hover{background:#fff;color:#2a0b3d;border-color:#fff}
+
 
 .about{display:grid;grid-template-columns:.7fr 1.3fr;gap:28px;padding:35px 0 55px;border-bottom:1px solid var(--line);margin-top:25px}
 .about-label{font:10px var(--mono);color:var(--pink);letter-spacing:.13em}
@@ -217,6 +218,7 @@ footer button.insonia{background:none;border:0;padding:0;font:inherit;letter-spa
     <a class="link-card wide primary-card" href="https://marceliovenancio.vercel.app/" target="_blank" rel="noopener noreferrer"><svg class="brand" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0l2.4 9.6L24 12l-9.6 2.4L12 24l-2.4-9.6L0 12l9.6-2.4z"/></svg><span><span class="card-index">COISAS QUE EU FAÇO</span><span class="card-name">Portfólio</span></span><span class="card-sub">Design · IA · tecnologia</span></a>
   </div>
 </section>
+
 
 <section class="about">
   <div class="about-label">02 / MANIFESTO PESSOAL</div>
@@ -369,7 +371,7 @@ const hints={
   button:'Logo no começo da página tem um botão pedindo pra você NÃO clicar. Obedecer é superestimado.',
   core:'O "GB" gigante no meio da arte não gosta de ser cutucado. Insiste: toca nele várias vezes seguidas.',
   logo:'O logo lá em cima, no canto esquerdo, parece só texto. Toca nele três vezes, rápido.',
-  konami:'O letreiro que não para de passar (ROCK\'N\'ROLL...) esconde algo, segura pra ver kkk. No PC existe um código clássico dos jogos.',
+  konami:'O letreiro que não para de passar (ROCK\'N\'ROLL...) esconde algo. Segura o dedo nele por um segundinho. No PC existe um código clássico dos jogos.',
   rgb:'Lá no topo, à direita do logo, diz que alguém está "online em algum lugar". Toca três vezes nisso e pensa no PC dele. No teclado, vale digitar 3 letras de cor.',
   night:'No rodapé tem uma palavra sublinhada com pontinhos. Quem não dorme entende.'
 };
@@ -382,7 +384,7 @@ $('hint').onclick=()=>{
 /* copiar link do site */
 $('share').onclick=async()=>{
   try{await navigator.clipboard.writeText(location.href.split('#')[0]);say('LINK COPIADO ✳')}
-  catch(e){say('NÃO DEU PRA COPIAR. COPIA DA BARRA MESMO KKKKKKK.',2400)}
+  catch(e){say('NÃO DEU PRA COPIAR. COPIA DA BARRA MESMO.',2400)}
 };
 
 $('year').textContent=new Date().getFullYear();
